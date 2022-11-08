@@ -1,6 +1,9 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { Inter } from '@next/font/google'
 import './styles.css';
+
+const inter = Inter()
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -8,7 +11,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome to sogrow!</title>
       </Head>
-      <main className="app">
+      <main className={inter.className}>
         <Component {...pageProps} />
       </main>
     </>

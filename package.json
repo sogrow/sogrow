@@ -10,6 +10,9 @@
   },
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.7.4",
+    "@heroicons/react": "^2.0.13",
+    "@next/font": "^13.0.2",
     "@nrwl/next": "15.0.12",
     "core-js": "^3.6.5",
     "next": "13.0.0",
