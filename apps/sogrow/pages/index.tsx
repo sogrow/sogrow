@@ -1,5 +1,7 @@
+import Hero from '../components/hero'
+
 export function Index() {
-  return <div>Hello World!</div>
+  return <Hero />
 }
 
 export default Index
