@@ -9,7 +9,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Sogrow • Grow your audience organically</title>
+        <title>Sogrow • Grow your audience with confidence</title>
       </Head>
       <main className={inter.className}>
         <Component {...pageProps} />
