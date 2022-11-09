@@ -9,6 +9,9 @@
     "prepare": "husky install"
   },
   "private": true,
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^2.0.13",
@@ -55,6 +58,7 @@
     "nx": "15.0.12",
     "postcss": "8.4.16",
     "prettier": "^2.6.2",
+    "prettier-plugin-tailwindcss": "^0.1.13",
     "react-test-renderer": "18.2.0",
     "tailwindcss": "3.1.8",
     "ts-jest": "28.0.5",
