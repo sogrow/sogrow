@@ -48,7 +48,7 @@ export function Features() {
               <Image src={feature.image.src} alt={feature.image.alt} fill />
             </div>
             <div className={classNames('flex flex-col justify-center justify-self-end sm:max-w-xs')}>
-              <h2 className="text-xl font-medium text-gray-900 sm:text-2xl md:text-2xl">{feature.headline}</h2>
+              <h2 className="text-xl font-medium text-gray-900 sm:text-2xl md:text-3xl">{feature.headline}</h2>
               <p className="sm:text-ml mt-4 mb-6 max-w-md text-sm text-base text-gray-500">{feature.content}</p>
               <ul className="max-w-md list-inside space-y-2 text-gray-900">
                 {feature.summary.map((summary) => (
