@@ -1,6 +1,7 @@
 import Hero from '../components/hero'
 import Features from '../components/features'
-import Pricing from '../components/pricing';
+import Pricing from '../components/pricing'
+import Newsletter from '../components/newsletter'
 
 export function Index() {
   return (
@@ -8,6 +9,7 @@ export function Index() {
       <Hero />
       <Features />
       <Pricing />
+      <Newsletter />
     </>
   )
 }
