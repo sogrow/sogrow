@@ -8,8 +8,8 @@ const features = [
   {
     name: 'publish',
     headline: 'Write & schedule your content ahead',
-    content: 'Remove the noise and craft your feed with only the people you want to engage with.',
-    summary: ['Create a feed of people', 'See their Tweets & Threads', 'Like, Reply and Share'],
+    content: 'Write Tweets and Threads ahead. Publish them immediately or set a custom schedule—we will make sure they are delivered on time.',
+    summary: ['Write without distractions', 'Schedule your content', 'Publish with one click'],
     image: {
       src: publish,
       alt: '',
