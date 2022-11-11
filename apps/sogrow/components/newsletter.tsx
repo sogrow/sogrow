@@ -21,7 +21,7 @@ export function Newsletter() {
   })
 
   return (
-    <section className="mx-auto flex max-w-md flex-col items-center px-4 py-16 text-center">
+    <section id="join" className="mx-auto flex max-w-md flex-col items-center px-4 py-16 text-center">
       <h2 className="mb-6 max-w-xs text-4xl font-medium text-gray-900 sm:mb-8 md:text-5xl">Get notified when we release</h2>
       <p className="sm:text-ml text-cs mb-8 text-base text-gray-500">
         Be the first to know when we release—and start growing your audience for free.

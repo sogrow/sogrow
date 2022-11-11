@@ -10,12 +10,12 @@ export function Hero() {
         <h1 className="mt-4 mb-4 max-w-md px-2 text-sm text-base text-gray-500 sm:mb-6 sm:text-lg md:mt-8 md:text-xl">
           Engage and grow your Twitter audience with confidence without writing into the void.
         </h1>
-        <button
-          type="button"
+        <a
+          href="#join"
           className="w-full rounded-full border border-transparent bg-gray-700 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 sm:w-fit"
         >
           Notify me
-        </button>
+        </a>
       </section>
       <section className="mt-24 flex flex-col items-center bg-gray-100 text-center sm:mt-24">
         <div className="mx-auto max-w-md px-4 py-16">
