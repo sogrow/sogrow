@@ -86,9 +86,6 @@ export function Pricing() {
                 2 months free
               </span>
             </div>
-            <div className="grid grid-col-1 sm:grid-col-2">
-
-            </div>
           </div>
         </div>
       </div>
