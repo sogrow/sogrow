@@ -12,7 +12,7 @@ const features = [
     summary: ['Write without distractions', 'Schedule your content', 'Publish with one click'],
     image: {
       src: publish,
-      alt: '',
+      alt: 'Publish Tweets and Thread whenever you like.',
     },
   },
   {
@@ -23,7 +23,7 @@ const features = [
     summary: ['Get a detailed analytics overview', 'See your relative growth', 'Filter based on Likes, Shares, etc.'],
     image: {
       src: analyze,
-      alt: '',
+      alt: 'Analyze your previous Tweets and see what\'s working.',
     },
   },
   {
@@ -33,7 +33,7 @@ const features = [
     summary: ['Create a feed of people', 'See their Tweets & Threads', 'Like, Reply and Share'],
     image: {
       src: engage,
-      alt: '',
+      alt: 'Engage with people',
     },
   },
 ]
