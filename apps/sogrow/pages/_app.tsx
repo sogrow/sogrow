@@ -21,6 +21,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         />
         <meta name="google" content="nositelinkssearchbox" key="sitelinks" />
         <meta name="google" content="notranslate" key="notranslate" />
+        <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
       <main className={inter.className}>
         <QueryClientProvider client={queryClient}>
