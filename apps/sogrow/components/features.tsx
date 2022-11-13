@@ -41,7 +41,7 @@ const features = [
 export function Features() {
   return (
     <section className="mx-auto mt-16 max-w-md px-4 sm:mt-12 sm:max-w-4xl lg:mt-16 lg:px-8">
-      <div className="grid grid-cols-1 text-center sm:text-left">
+      <div className="grid grid-cols-1 text-center sm:text-left mb-4">
         {features.map((feature, index) => (
           <div key={feature.name} className="mb-12 grid space-y-2 sm:grid-cols-2 sm:space-y-0 sm:space-x-8">
             <div className={classNames('relative mb-12 h-48 sm:mb-0 md:h-80', { 'sm:order-1': index % 2 != 0 })}>

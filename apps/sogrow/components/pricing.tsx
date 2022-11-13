@@ -21,7 +21,7 @@ export function Pricing() {
   return (
     <section>
       <div className="flex flex-col items-center bg-gray-100 text-center">
-        <div className="mx-auto max-w-sm px-4 pt-16 pb-32">
+        <div className="mx-auto max-w-sm px-4 mt-16 pb-32">
           <p className="sm:text-ml mb-4 text-sm text-base text-gray-500">We grow as you grow</p>
           <h2 className="mb-6 text-4xl font-medium text-gray-900 sm:mb-8 md:text-5xl">
             Start for free. <br /> Grow together.
@@ -33,7 +33,7 @@ export function Pricing() {
         </div>
       </div>
       <div className="mx-4 flex flex-col items-center sm:mx-0 sm:px-4">
-        <div className="-mt-24 mb-24 w-full overflow-hidden rounded-lg bg-white p-5 shadow-md shadow sm:max-w-4xl sm:p-8">
+        <div className="-mt-24 mb-16 w-full overflow-hidden rounded-lg bg-white p-5 shadow-md shadow sm:max-w-4xl sm:p-8">
           <div className="mb-8 flex justify-between">
             <div>
               <span className="block text-sm text-base text-gray-500">Followers</span>
