@@ -2,12 +2,25 @@ import { EnvelopeIcon, ExclamationCircleIcon } from '@heroicons/react/20/solid'
 import { FormikProps, useFormik } from 'formik'
 import * as Yup from 'yup'
 import classNames from 'classnames'
+import { useSubscribeToNewsletter } from '../hooks/useSubscribeToNewsletter'
+import { SimpleModal } from './simpleModal'
+import { useEffect, useState } from 'react'
+import { CheckIcon } from '@heroicons/react/24/outline'
 
 interface NewsLetterFields {
   email: string
 }
 
 export function Newsletter() {
+  const { isLoading, isError, isSuccess, mutate } = useSubscribeToNewsletter()
+  const [open, setOpen] = useState(false)
+
+  const getButtonText = () => {
+    if (isLoading) return 'Loading'
+    if (isError) return 'Try again'
+    return 'Subscribe'
+  }
+
   const newsletterForm: FormikProps<NewsLetterFields> = useFormik<NewsLetterFields>({
     initialValues: {
       email: '',
@@ -15,10 +28,16 @@ export function Newsletter() {
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid email address').required('Required'),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+    onSubmit: ({ email }) => {
+      mutate(email)
     },
   })
+
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(true)
+    }
+  }, [isSuccess])
 
   return (
     <section id="join" className="mx-auto flex max-w-md flex-col items-center px-4 py-16 text-center">
@@ -50,6 +69,11 @@ export function Newsletter() {
                 <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             )}
+            {isSuccess && (
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <CheckIcon className="h-5 w-5 text-green-600" aria-hidden="true" />
+              </div>
+            )}
           </div>
           {newsletterForm.touched.email && newsletterForm.errors.email && (
             <p className="mb-2 ml-4 text-left text-sm text-red-600" id="email-error">
@@ -58,12 +82,21 @@ export function Newsletter() {
           )}
         </div>
         <button
+          disabled={isLoading || isSuccess}
           type="submit"
-          className="w-full self-baseline rounded-full border border-transparent bg-gray-700 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 sm:w-fit"
+          className="w-full self-baseline rounded-full border border-transparent bg-gray-700 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-gray-700 sm:w-fit"
         >
-          Subscribe
+          {getButtonText()}
         </button>
       </form>
+      <p className="sm:text-ml text-cs mt-4 text-base text-gray-500">No spam—ever.</p>
+      <SimpleModal
+        open={open}
+        title="Check your Inbox"
+        content="Thank you for subscribing and supporting Sogrow. Please confirm your subscription."
+        btnText="Close"
+        onClose={() => setOpen(false)}
+      />
     </section>
   )
 }
