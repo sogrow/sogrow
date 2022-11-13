@@ -4,7 +4,7 @@ import { Inter } from '@next/font/google'
 import './styles.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import React from 'react'
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,7 +13,14 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Sogrow • Grow your audience with confidence</title>
+        <title>Sogrow | Engage and grow your Twitter audience organically</title>
+        <meta
+          name="description"
+          content="Engage and grow your Twitter audience with confidence without writing into the void."
+          key="desc"
+        />
+        <meta name="google" content="nositelinkssearchbox" key="sitelinks" />
+        <meta name="google" content="notranslate" key="notranslate" />
       </Head>
       <main className={inter.className}>
         <QueryClientProvider client={queryClient}>

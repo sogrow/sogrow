@@ -21,7 +21,7 @@ export function Pricing() {
   return (
     <section>
       <div className="flex flex-col items-center bg-gray-100 text-center">
-        <div className="mx-auto max-w-sm px-4 mt-16 pb-32">
+        <div className="mx-auto mt-16 max-w-sm px-4 pb-32">
           <p className="sm:text-ml mb-4 text-sm text-base text-gray-500">We grow as you grow</p>
           <h2 className="mb-6 text-4xl font-medium text-gray-900 sm:mb-8 md:text-5xl">
             Start for free. <br /> Grow together.
@@ -49,6 +49,7 @@ export function Pricing() {
           <input
             type="range"
             id="pricing"
+            aria-label="range"
             min="0"
             max="160"
             step="20"
