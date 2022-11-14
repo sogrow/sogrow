@@ -18,7 +18,7 @@ export function Newsletter() {
   const getButtonText = () => {
     if (isLoading) return 'Loading'
     if (isError) return 'Try again'
-    return 'Subscribe'
+    return 'Notify me'
   }
 
   const newsletterForm: FormikProps<NewsLetterFields> = useFormik<NewsLetterFields>({
