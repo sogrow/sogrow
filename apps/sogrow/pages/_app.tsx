@@ -22,7 +22,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         {/*Facebook Meta Tags*/}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Sogrow | Engage and grow your Twitter audience organically" />
-        <meta property="og:url" content="https://www.sogrow.co" />
+        <meta property="og:url" content="https://sogrow.co" />
         <meta property="og:description" content="Engage and grow your Twitter audience with confidence without writing into the void." />
         <meta property="og:image" content="https://sogrow.co/api/og" />
         <meta property="og:image:secure_url" content="https://sogrow.co/api/og" />
