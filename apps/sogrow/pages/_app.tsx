@@ -19,6 +19,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
           content="Engage and grow your Twitter audience with confidence without writing into the void."
           key="desc"
         />
+        {/*Favico etc.*/}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+
         {/*Facebook Meta Tags*/}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Sogrow | Never Guess Again" />
