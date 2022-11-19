@@ -1,6 +1,6 @@
 import Header from '../components/header'
 import Footer from '../components/footer'
-import Link from 'next/link';
+import Link from 'next/link'
 
 export function Custom404Page() {
   return (

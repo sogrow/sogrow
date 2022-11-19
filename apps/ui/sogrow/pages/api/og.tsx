@@ -20,7 +20,7 @@ export default async function handler() {
         <div tw="flex h-full mx-auto drop-shadow-2xl">
           <div tw="flex flex-col justify-center align-center px-30 h-full">
             <div tw="flex items-center">
-              <img tw="mr-2 w-12 h-12" src={`${websiteUrl}/images/logo.png`} alt='Sogrow Logo' width={40} height={40} />
+              <img tw="mr-2 w-12 h-12" src={`${websiteUrl}/images/logo.png`} alt="Sogrow Logo" width={40} height={40} />
               <p tw="text-4xl" style={{ fontFamily: "'Bebas Neue'" }}>
                 <span tw="text-bold text-gray-500">So</span>
                 <span tw="text-gray-900">grow</span>
