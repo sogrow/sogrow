@@ -5,21 +5,14 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-commands",
       "options": {
-        "target": "node",
-        "compiler": "tsc",
-        "outputPath": "dist/apps/services/analytics",
-        "main": "apps/services/analytics/src/main.ts",
-        "tsConfig": "apps/services/analytics/tsconfig.app.json",
-        "assets": ["apps/services/analytics/src/assets"]
+        "cwd": "apps/services/analytics",
+        "color": true,
+        "command": "export TS_NODE_PROJECT='./tsconfig.app.json' && sls package"
       },
       "configurations": {
         "production": {
-          "optimization": true,
-          "extractLicenses": true,
-          "inspect": false,
           "fileReplacements": [
             {
               "replace": "apps/services/analytics/src/environments/environment.ts",
@@ -30,14 +23,27 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/js:node",
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "analytics:build"
-      },
-      "configurations": {
-        "production": {
-          "buildTarget": "analytics:build:production"
-        }
+        "cwd": "apps/services/analytics",
+        "color": true,
+        "command": "export TS_NODE_PROJECT='./tsconfig.app.json' && sls offline start"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/services/analytics",
+        "color": true,
+        "command": "export TS_NODE_PROJECT='./tsconfig.app.json' && sls deploy --verbose"
+      }
+    },
+    "remove": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/services/analytics",
+        "color": true,
+        "command": "export TS_NODE_PROJECT='./tsconfig.app.json' && sls remove"
       }
     },
     "lint": {
