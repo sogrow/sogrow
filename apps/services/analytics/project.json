@@ -12,7 +12,15 @@
         "command": "export TS_NODE_PROJECT='./tsconfig.app.json' && sls package"
       },
       "configurations": {
-        "production": {
+        "preview": {
+          "fileReplacements": [
+            {
+              "replace": "apps/services/analytics/src/environments/environment.ts",
+              "with": "apps/services/analytics/src/environments/environment.preview.ts"
+            }
+          ]
+        },
+        "prod": {
           "fileReplacements": [
             {
               "replace": "apps/services/analytics/src/environments/environment.ts",
@@ -28,6 +36,24 @@
         "cwd": "apps/services/analytics",
         "color": true,
         "command": "export TS_NODE_PROJECT='./tsconfig.app.json' && sls offline start"
+      },
+      "configurations": {
+        "preview": {
+          "fileReplacements": [
+            {
+              "replace": "apps/services/analytics/src/environments/environment.ts",
+              "with": "apps/services/analytics/src/environments/environment.preview.ts"
+            }
+          ]
+        },
+        "prod": {
+          "fileReplacements": [
+            {
+              "replace": "apps/services/analytics/src/environments/environment.ts",
+              "with": "apps/services/analytics/src/environments/environment.prod.ts"
+            }
+          ]
+        }
       }
     },
     "deploy": {
@@ -36,6 +62,24 @@
         "cwd": "apps/services/analytics",
         "color": true,
         "command": "export TS_NODE_PROJECT='./tsconfig.app.json' && sls deploy --verbose"
+      },
+      "configurations": {
+        "preview": {
+          "fileReplacements": [
+            {
+              "replace": "apps/services/analytics/src/environments/environment.ts",
+              "with": "apps/services/analytics/src/environments/environment.preview.ts"
+            }
+          ]
+        },
+        "prod": {
+          "fileReplacements": [
+            {
+              "replace": "apps/services/analytics/src/environments/environment.ts",
+              "with": "apps/services/analytics/src/environments/environment.prod.ts"
+            }
+          ]
+        }
       }
     },
     "remove": {

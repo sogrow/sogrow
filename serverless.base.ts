@@ -1,16 +1,19 @@
 import type { Serverless } from 'serverless/aws'
+import { env, envName } from './environment/environment.serverless'
 const path = require('path')
+
+console.log(`-------------- USING ENV: ${env.name} ----------------`)
 
 export const baseServerlessConfigProvider: Serverless['provider'] = {
   name: 'aws',
   runtime: 'nodejs16.x',
-  profile: '',
-  stage: 'dev',
+  profile: env.profile,
+  stage: env.name,
   environment: {
-    NODE_ENV: process.env.NODE_ENV,
+    NODE_ENV: envName,
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
   },
-  region: 'eu-central-1',
+  region: env.region,
 }
 
 export const baseServerlessConfig: Partial<Serverless> = {
