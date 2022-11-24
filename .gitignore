@@ -44,3 +44,10 @@ Thumbs.db
 
 # Serverless
 /**/.serverless/*
+
+# Sensitive
+.env.pass
+/**/*.env
+/**/*.env.preview
+/**/*.env.prod
+
