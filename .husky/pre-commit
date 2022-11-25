@@ -3,8 +3,6 @@
 
 added_files=$(git diff --name-only --cached --diff-filter=d)
 
-npm run env:encrypt
 npx lint-staged
 
 git add ${added_files}
-git add ./**/*.encrypted
