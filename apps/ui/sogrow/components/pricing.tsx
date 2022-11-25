@@ -3,7 +3,7 @@ import { Switch } from '@headlessui/react'
 import classNames from 'classnames'
 
 const priceRange = {
-  0: { follower: '<10k', price: 'free for ever', priceYearly: 'free for ever' },
+  0: { follower: '<10k', price: 'free for ever', priceYearly: 'free forever' },
   20: { follower: '<100k', price: '$19 / mo', priceYearly: '$190 / yr' },
   40: { follower: '<200k', price: '$29 / mo', priceYearly: '$290 / yr' },
   60: { follower: '<500k', price: '$49 / mo', priceYearly: '$490 / yr' },
