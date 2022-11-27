@@ -5,10 +5,11 @@ import './styles.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import React from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { SessionProvider } from 'next-auth/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
-function CustomApp({ Component, pageProps }: AppProps) {
+function CustomApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient())
   return (
     <>
@@ -45,10 +46,12 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
       <main className={inter.className}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <SessionProvider session={session}>
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </SessionProvider>
       </main>
     </>
   )
