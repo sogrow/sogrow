@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@sogrow/ui/shared-webcomponents": ["libs/ui/shared-webcomponents/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

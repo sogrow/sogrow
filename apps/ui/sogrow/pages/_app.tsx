@@ -1,15 +1,23 @@
-import { AppProps } from 'next/app'
+import App, { AppContext, AppInitialProps, AppProps } from 'next/app'
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import './styles.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import React from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { SessionProvider } from 'next-auth/react'
+import { FeatureToggles } from '../config/featureToggle.type'
+import FeatureToggleContext from '../context/FeatureToggleContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
-function CustomApp({ Component, pageProps }: AppProps) {
+type AppOwnProps = {
+  featureToggles: FeatureToggles
+}
+
+function CustomApp({ Component, pageProps: { session, ...pageProps }, featureToggles }: AppProps & AppOwnProps) {
   const [queryClient] = React.useState(() => new QueryClient())
+  const [features] = React.useState(featureToggles)
   return (
     <>
       <Head>
@@ -45,13 +53,26 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
       <main className={inter.className}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <FeatureToggleContext.Provider value={features}>
+          <SessionProvider session={session}>
+            <QueryClientProvider client={queryClient}>
+              <Component {...pageProps} />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+          </SessionProvider>
+        </FeatureToggleContext.Provider>
       </main>
     </>
   )
+}
+
+CustomApp.getInitialProps = async (context: AppContext): Promise<AppOwnProps & AppInitialProps> => {
+  const ctx = await App.getInitialProps(context)
+  const featureToggles: FeatureToggles = {
+    useSocialLogin: process.env?.SHOW_SOCIAL_LOGIN === 'true',
+  }
+
+  return { ...ctx, featureToggles }
 }
 
 export default CustomApp

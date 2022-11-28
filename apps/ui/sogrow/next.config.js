@@ -16,6 +16,15 @@ const nextConfig = {
     locales: ['en'],
     defaultLocale: 'en',
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'pbs.twimg.com',
+        pathname: '/profile_images/**',
+      },
+    ],
+  },
 }
 
 module.exports = withNx(nextConfig)
