@@ -10,7 +10,7 @@
     }
   },
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "develop"
   },
   "targetDefaults": {
     "build": {
