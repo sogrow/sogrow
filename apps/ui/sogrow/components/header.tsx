@@ -2,13 +2,11 @@ import Logo from './logo'
 import { Button } from '@sogrow/ui/shared-webcomponents'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { useFeatureToggle } from '../hooks/useFeatureToggle'
 
-export interface HeaderProps {
-  showSocialLogin?: boolean
-}
-
-export function Header({ showSocialLogin = false }: HeaderProps) {
+export function Header() {
   const { data: session } = useSession()
+  const showSocialLogin = useFeatureToggle('useSocialLogin')
 
   let socialLogin = null
   if (showSocialLogin) {

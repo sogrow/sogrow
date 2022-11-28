@@ -5,10 +5,10 @@ import Pricing from '../components/pricing'
 import Newsletter from '../components/newsletter'
 import Footer from '../components/footer'
 
-export function Index({ showLogin }) {
+export function Index() {
   return (
     <>
-      <Header showSocialLogin={showLogin} />
+      <Header />
       <Hero />
       <Features />
       <Pricing />
@@ -16,15 +16,6 @@ export function Index({ showLogin }) {
       <Footer />
     </>
   )
-}
-
-export async function getStaticProps() {
-  const showLogin = process.env?.SHOW_SOCIAL_LOGIN === 'true'
-  return {
-    props: {
-      showLogin,
-    },
-  }
 }
 
 export default Index
