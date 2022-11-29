@@ -1,0 +1,98 @@
+name: Deploy serverless
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  affected:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node (v${{ matrix.node-version }})
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Find Affected
+        id: find-affected
+        run: echo "::set-output name=affected::$(node ./tools/github-actions/find-affected.js type:service)"
+
+      - name: Print Affected
+        run: echo ${{ fromJSON(steps.find-affected.outputs.affected).affectedMatrix }}
+
+    outputs:
+      affected: ${{ fromJSON(steps.find-affected.outputs.affected).affectedMatrix }}
+      has-affected: ${{ fromJSON(steps.find-affected.outputs.affected).hasAffected }}
+
+  staging:
+    needs: affected
+    runs-on: ubuntu-latest
+    if: ${{ fromJSON(needs.affected.outputs.has-affected) && contains(github.ref, 'develop') }}
+
+    strategy:
+      matrix:
+        app: ${{ fromJSON(needs.affected.outputs.affected) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node (v${{ matrix.node-version }})
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+
+      - name: Deploy Serverless
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-central-1'
+        run: NODE_ENV=preview npx nx deploy ${{ matrix.app }} --configuration=preview
+
+  production:
+    needs: affected
+    runs-on: ubuntu-latest
+    if: ${{ fromJSON(needs.affected.outputs.has-affected) && contains(github.ref, 'main') }}
+
+    strategy:
+      matrix:
+        app: ${{ fromJSON(needs.affected.outputs.affected) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node (v${{ matrix.node-version }})
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+
+      - name: Deploy Serverless
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-central-1'
+        run: NODE_ENV=prod npx nx deploy ${{ matrix.app }} --configuration=prod
