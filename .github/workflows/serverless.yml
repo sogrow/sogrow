@@ -3,7 +3,8 @@ name: Deploy serverless
 on:
   push:
     branches:
-      - feat/enable-ci-cd-be
+      - develop
+      - main
 
 jobs:
   affected:
@@ -43,7 +44,7 @@ jobs:
   staging:
     needs: affected
     runs-on: ubuntu-latest
-    if: ${{ fromJSON(needs.affected.outputs.has-affected) && contains(github.ref, 'feat/enable-ci-cd-be') }}
+    if: ${{ fromJSON(needs.affected.outputs.has-affected) && contains(github.ref, 'develop') }}
 
     strategy:
       matrix:
@@ -67,3 +68,31 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
         run: NODE_ENV=preview npx nx deploy ${{ matrix.app }} --configuration=preview
+
+  production:
+    needs: affected
+    runs-on: ubuntu-latest
+    if: ${{ fromJSON(needs.affected.outputs.has-affected) && contains(github.ref, 'main') }}
+
+    strategy:
+      matrix:
+        app: ${{ fromJSON(needs.affected.outputs.affected) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node (v${{ matrix.node-version }})
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+
+      - name: Deploy Serverless
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-central-1'
+        run: NODE_ENV=prod npx nx deploy ${{ matrix.app }} --configuration=prod
