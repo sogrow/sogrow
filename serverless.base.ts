@@ -23,8 +23,14 @@ export const baseServerlessConfig: Partial<Serverless> = {
     individually: true,
     excludeDevDependencies: true,
   },
-  plugins: ['serverless-webpack', 'serverless-offline'],
+  plugins: ['serverless-webpack', 'serverless-offline', 'serverless-domain-manager'],
   custom: {
+    customDomain: {
+      domainName: env.domainName,
+      basePath: '',
+      createRoute53Record: true,
+      stage: env.stage,
+    },
     webpack: {
       webpackConfig: path.relative(process.cwd(), 'webpack.config.js'),
       includeModules: {

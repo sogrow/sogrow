@@ -1,0 +1,5 @@
+config:
+  aws:region: eu-central-1
+  sogrow:acm:
+    domainName: api-preview.sogrow.cloud
+  sogrow:acm.domainName: api-preview.sogrow.cloud

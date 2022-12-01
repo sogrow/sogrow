@@ -9,6 +9,10 @@ const serverlessConfig: Partial<Serverless> = {
   },
   custom: {
     ...baseServerlessConfig.custom,
+    customDomain: {
+      ...baseServerlessConfig.custom.customDomain,
+      basePath: 'analytics',
+    },
   },
   functions: {
     analytics: {
