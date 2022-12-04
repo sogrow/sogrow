@@ -31,6 +31,9 @@ const serverlessConfig: Partial<Serverless> = {
           },
         },
       ],
+      environment: {
+        TOKEN_SECRET: '${env:TOKEN_SECRET}',
+      },
     },
   },
 }

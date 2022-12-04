@@ -17,4 +17,10 @@ npx senv encrypt apps/services/analytics/.env > apps/services/analytics/.env.enc
 npx senv encrypt apps/services/analytics/.env.preview > apps/services/analytics/.env.preview.encrypted
 npx senv encrypt apps/services/analytics/.env.prod > apps/services/analytics/.env.prod.encrypted
 
+# Identity
+echo -e "[${BLUE}INFO${NC}] Encrypting Identity 🔐"
+npx senv encrypt apps/services/identity/.env > apps/services/identity/.env.encrypted
+npx senv encrypt apps/services/identity/.env.preview > apps/services/identity/.env.preview.encrypted
+npx senv encrypt apps/services/identity/.env.prod > apps/services/identity/.env.prod.encrypted
+
 echo -e "[${BLUE}INFO${NC}] Done ✅"

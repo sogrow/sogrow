@@ -95,4 +95,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-central-1'
-        run: NODE_ENV=prod npx nx deploy ${{ matrix.app }} --configuration=prod
+        run: NODE_ENV=production npx nx deploy ${{ matrix.app }} --configuration=production

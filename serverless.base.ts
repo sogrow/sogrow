@@ -19,6 +19,7 @@ export const baseServerlessConfigProvider: Serverless['provider'] = {
 export const baseServerlessConfig: Partial<Serverless> = {
   frameworkVersion: '3',
   service: 'base',
+  useDotenv: true,
   package: {
     individually: true,
     excludeDevDependencies: true,

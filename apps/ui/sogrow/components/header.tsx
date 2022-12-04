@@ -6,6 +6,7 @@ import { useFeatureToggle } from '../hooks/useFeatureToggle'
 
 export function Header() {
   const { data: session } = useSession()
+  console.log({ session })
   const showSocialLogin = useFeatureToggle('useSocialLogin')
 
   let socialLogin = null
@@ -31,7 +32,7 @@ export function Header() {
 
   return (
     <header>
-      <div className="mx-auto max-w-5xl py-6 px-4 text-center sm:px-6 flex items-center justify-between lg:px-8">
+      <div className="mx-auto flex max-w-5xl items-center justify-between py-6 px-4 text-center sm:px-6 lg:px-8">
         <Logo />
         {socialLogin}
       </div>

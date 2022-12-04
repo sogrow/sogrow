@@ -15,6 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@sogrow/services/auth": ["libs/services/auth/src/index.ts"],
+      "@sogrow/services/domain/bom": ["libs/services/domain/bom/src/index.ts"],
+      "@sogrow/services/infra/gateway": ["libs/services/infra/gateway/src/index.ts"],
+      "@sogrow/services/infra/instrumentation": ["libs/services/infra/instrumentation/src/index.ts"],
+      "@sogrow/services/infra/observation": ["libs/services/infra/observation/src/index.ts"],
       "@sogrow/ui/shared-webcomponents": ["libs/ui/shared-webcomponents/src/index.ts"]
     }
   },
