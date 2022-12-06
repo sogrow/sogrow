@@ -5,4 +5,5 @@ export const env: ServerlessEnvironment = {
   profile: '',
   region: 'eu-central-1',
   domainName: 'api-preview.sogrow.cloud',
+  vpcName: 'default',
 }

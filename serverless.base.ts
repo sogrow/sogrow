@@ -23,7 +23,7 @@ export const baseServerlessConfig: Partial<Serverless> = {
     individually: true,
     excludeDevDependencies: true,
   },
-  plugins: ['serverless-webpack', 'serverless-offline', 'serverless-domain-manager'],
+  plugins: ['serverless-webpack', 'serverless-offline', 'serverless-domain-manager', 'serverless-vpc-discovery'],
   custom: {
     customDomain: {
       domainName: env.domainName,
@@ -40,6 +40,21 @@ export const baseServerlessConfig: Partial<Serverless> = {
       packageOptions: {
         lockFile: path.join('../../../', 'package-lock.json'),
       },
+    },
+    vpcDiscovery: {
+      vpcName: env.vpcName,
+      subnets: [
+        {
+          tagKey: 'Name',
+          tagValues: ['default-subnet'],
+        },
+      ],
+      securityGroups: [
+        {
+          tagKey: 'Name',
+          tagValues: ['sogrow-security-group'],
+        },
+      ],
     },
   },
   provider: {

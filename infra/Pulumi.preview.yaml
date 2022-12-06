@@ -3,3 +3,9 @@ config:
   sogrow:acm:
     domainName: api-preview.sogrow.cloud
   sogrow:acm.domainName: api-preview.sogrow.cloud
+  sogrow:rds.clusterIdentifier: aurora-sogrow-preview-cluster
+  sogrow:rds.masterPassword:
+    secure: AAABAPVl4KXaBa2Z23mdkO7LtIcRrXtB1NJl1XavQ5TKZKt380j2N+ISymgYbfzPVRVyyoF3uytANqxtux1yL0juSf3RA5nmKGhB6g==
+  sogrow:rds.masterUsername:
+    secure: AAABAFQpLgV6gwetRgbez/3MwvwDwd231/5+GFQ6zian+OYhR48=
+  sogrow:vpc.name: vpc-preview
