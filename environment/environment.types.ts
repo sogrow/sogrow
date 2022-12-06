@@ -3,4 +3,5 @@ export interface ServerlessEnvironment {
   region: string
   profile: string
   domainName: string
+  vpcName: string
 }
