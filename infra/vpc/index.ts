@@ -31,6 +31,20 @@ export class VPC extends pulumi.ComponentResource {
             protocol: 'tcp',
             cidrBlocks: ['0.0.0.0/0'],
           },
+          {
+            description: 'allow Aurora Serverless access',
+            fromPort: 5432,
+            toPort: 5432,
+            protocol: 'tcp',
+            cidrBlocks: ['0.0.0.0/0'],
+          },
+          {
+            description: 'allow ssh access',
+            fromPort: 22,
+            toPort: 22,
+            protocol: 'tcp',
+            cidrBlocks: ['0.0.0.0/0'],
+          },
         ],
         egress: [
           {

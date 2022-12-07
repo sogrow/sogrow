@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
+import SogrowAdapter from '../../../lib/next-auth-custom-adapter'
 
 export const authOption: NextAuthOptions = {
   providers: [
@@ -11,4 +12,8 @@ export const authOption: NextAuthOptions = {
   ],
 }
 
-export default NextAuth(authOption)
+const sogrowAdapter = SogrowAdapter()
+export default NextAuth({
+  adapter: sogrowAdapter,
+  providers: authOption.providers,
+})

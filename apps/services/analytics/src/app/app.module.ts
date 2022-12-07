@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { AuthModule } from '@sogrow/services/auth'
 import { ConfigModule } from '@nestjs/config'
+import { LoggerModule } from '@sogrow/services/infra/observation'
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), LoggerModule.forRoot()],
   controllers: [AppController],
   providers: [AppService],
 })

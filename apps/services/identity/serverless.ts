@@ -15,7 +15,7 @@ const serverlessConfig: Partial<Serverless> = {
     },
   },
   functions: {
-    analytics: {
+    main: {
       handler: './src/lambda.handler',
       events: [
         {
@@ -33,6 +33,7 @@ const serverlessConfig: Partial<Serverless> = {
       ],
       environment: {
         TOKEN_SECRET: '${env:TOKEN_SECRET}',
+        DATABASE_URL: '${env:DATABASE_URL}',
       },
     },
   },
