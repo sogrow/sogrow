@@ -48,6 +48,8 @@ Thumbs.db
 
 # Sensitive
 .env.pass
+.env.preview.pass
+.env.prod.pass
 /**/*.env
 /**/*.env.preview
 /**/*.env.prod

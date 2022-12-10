@@ -62,11 +62,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
 
-      - name: "Decrypt env files"
-        run: npm run env:decrypt
+      - name: 'Decrypt env files'
+        run: ./scripts/env-decrypt.sh ${{ matrix.app }} preview
         timeout-minutes: 1
         env:
-          DOTENV_PASS: ${{ secrets.DOTENV_PASS }}
+          DOTENV_PASS: ${{ secrets.DOTENV_PREVIEW_PASS }}
 
       - name: Deploy Serverless
         env:
@@ -96,11 +96,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
 
-      - name: "Decrypt env files"
-        run: npm run env:decrypt
+      - name: 'Decrypt env files'
+        run: ./scripts/env-decrypt.sh ${{ matrix.app }} prod
         timeout-minutes: 1
         env:
-          DOTENV_PASS: ${{ secrets.DOTENV_PASS }}
+          DOTENV_PASS: ${{ secrets.DOTENV_PROD_PASS }}
 
       - name: Deploy Serverless
         env:
