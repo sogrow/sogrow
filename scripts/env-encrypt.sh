@@ -9,19 +9,14 @@ ORANGE='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "[${BLUE}INFO${NC}] Encrypting sensitive environment files ⚙️"
+# Get the service and environment arguments
+service=$1
+environment=$2
 
-# Define an array of services to encrypt
-services=(analytics identity)
+# Print a message
+echo -e "[${BLUE}INFO${NC}] Encrypting $service in $environment environment ⚙️"
 
-# Iterate over the services and encrypt the environment files
-for service in "${services[@]}"
-do
-  # Encrypt the unencrypted environment files
-  echo -e "[${BLUE}INFO${NC}] Encrypting $service"
-  npx senv encrypt apps/services/$service/.env > apps/services/$service/.env.encrypted
-  npx senv encrypt apps/services/$service/.env.preview > apps/services/$service/.env.preview.encrypted
-  npx senv encrypt apps/services/$service/.env.prod > apps/services/$service/.env.prod.encrypted
-done
+# Encrypt the decrypted environment files
+npx senv encrypt apps/services/$service/.env.$environment > apps/services/$service/.env.$environment.encrypted
 
 echo -e "[${BLUE}INFO${NC}] Done ✅"

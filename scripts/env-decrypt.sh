@@ -9,19 +9,13 @@ ORANGE='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "[${BLUE}INFO${NC}] Decrypting sensitive environment files ⚙️"
+# Get the service and environment arguments
+service=$1
+environment=$2
 
-# Define an array of services to decrypt
-services=(analytics identity)
+echo -e "[${BLUE}INFO${NC}] Decrypting $service in $environment environment ⚙️"
 
-# Iterate over the services and decrypt the environment files
-for service in "${services[@]}"
-do
-  # Decrypt the encrypted environment files
-  echo -e "[${BLUE}INFO${NC}] Decrypting $service"
-  npx senv decrypt apps/services/$service/.env.encrypted > apps/services/$service/.env
-  npx senv decrypt apps/services/$service/.env.preview.encrypted > apps/services/$service/.env.preview
-  npx senv decrypt apps/services/$service/.env.prod.encrypted > apps/services/$service/.env.prod
-done
+# Decrypt the encrypted environment files
+npx senv decrypt apps/services/$service/.env.$environment.encrypted > apps/services/$service/.env.$environment
 
 echo -e "[${BLUE}INFO${NC}] Done ✅"
