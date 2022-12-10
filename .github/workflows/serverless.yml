@@ -66,7 +66,7 @@ jobs:
         run: ./scripts/env-decrypt.sh ${{ matrix.app }} preview
         timeout-minutes: 1
         env:
-          DOTENV_PASS: ${{ secrets.DOTENV_PREVIEW_PASS }}
+          DOTENV_PREVIEW_PASS: ${{ secrets.DOTENV_PREVIEW_PASS }}
 
       - name: Deploy Serverless
         env:
@@ -100,7 +100,7 @@ jobs:
         run: ./scripts/env-decrypt.sh ${{ matrix.app }} prod
         timeout-minutes: 1
         env:
-          DOTENV_PASS: ${{ secrets.DOTENV_PROD_PASS }}
+          DOTENV_PROD_PASS: ${{ secrets.DOTENV_PROD_PASS }}
 
       - name: Deploy Serverless
         env:
