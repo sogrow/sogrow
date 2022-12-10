@@ -62,6 +62,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
 
+      - name: "Decrypt env files"
+        run: npm run env:decrypt
+        timeout-minutes: 1
+        env:
+          DOTENV_PASS: ${{ secrets.DOTENV_PASS }}
+
       - name: Deploy Serverless
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

@@ -11,16 +11,17 @@ NC='\033[0m'
 
 echo -e "[${BLUE}INFO${NC}] Decrypting sensitive environment files ⚙️"
 
-# Analytics
-echo -e "[${BLUE}INFO${NC}] Decrypting Analytics 🔎"
-npx senv decrypt apps/services/analytics/.env.encrypted > apps/services/analytics/.env
-npx senv decrypt apps/services/analytics/.env.preview.encrypted > apps/services/analytics/.env.preview
-npx senv decrypt apps/services/analytics/.env.prod.encrypted > apps/services/analytics/.env.prod
+# Define an array of services to decrypt
+services=(analytics identity)
 
-# Analytics
-echo -e "[${BLUE}INFO${NC}] Decrypting Identity 🔐"
-npx senv decrypt apps/services/identity/.env.encrypted > apps/services/identity/.env
-npx senv decrypt apps/services/identity/.env.preview.encrypted > apps/services/identity/.env.preview
-npx senv decrypt apps/services/identity/.env.prod.encrypted > apps/services/identity/.env.prod
+# Iterate over the services and decrypt the environment files
+for service in "${services[@]}"
+do
+  # Decrypt the encrypted environment files
+  echo -e "[${BLUE}INFO${NC}] Decrypting $service"
+  npx senv decrypt apps/services/$service/.env.encrypted > apps/services/$service/.env
+  npx senv decrypt apps/services/$service/.env.preview.encrypted > apps/services/$service/.env.preview
+  npx senv decrypt apps/services/$service/.env.prod.encrypted > apps/services/$service/.env.prod
+done
 
 echo -e "[${BLUE}INFO${NC}] Done ✅"
