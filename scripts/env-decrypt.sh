@@ -12,10 +12,15 @@ NC='\033[0m'
 echo -e "[${BLUE}INFO${NC}] Decrypting sensitive environment files ⚙️"
 
 # Analytics
-
 echo -e "[${BLUE}INFO${NC}] Decrypting Analytics 🔎"
 npx senv decrypt apps/services/analytics/.env.encrypted > apps/services/analytics/.env
 npx senv decrypt apps/services/analytics/.env.preview.encrypted > apps/services/analytics/.env.preview
 npx senv decrypt apps/services/analytics/.env.prod.encrypted > apps/services/analytics/.env.prod
+
+# Analytics
+echo -e "[${BLUE}INFO${NC}] Decrypting Identity 🔐"
+npx senv decrypt apps/services/identity/.env.encrypted > apps/services/identity/.env
+npx senv decrypt apps/services/identity/.env.preview.encrypted > apps/services/identity/.env.preview
+npx senv decrypt apps/services/identity/.env.prod.encrypted > apps/services/identity/.env.prod
 
 echo -e "[${BLUE}INFO${NC}] Done ✅"

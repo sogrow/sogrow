@@ -11,6 +11,7 @@ export class RDS extends pulumi.ComponentResource {
       masterPassword: string
       masterUsername: string
       vpc: awsx.ec2.DefaultVpc
+      sg: aws.ec2.SecurityGroup
     },
     opts: any = {},
   ) {
@@ -27,15 +28,17 @@ export class RDS extends pulumi.ComponentResource {
       'postgresql',
       {
         availabilityZones: ['eu-central-1a', 'eu-central-1b', 'eu-central-1c'],
-        backupRetentionPeriod: 1,
+        backupRetentionPeriod: 5,
         clusterIdentifier: args.clusterIdentifier,
         databaseName: 'sogrowdb',
         engine: 'aurora-postgresql',
         engineMode: 'serverless',
         dbSubnetGroupName: this.dbSubnet.name,
+        vpcSecurityGroupIds: [args.sg.id],
         masterUsername: args.masterUsername,
         masterPassword: args.masterPassword,
         skipFinalSnapshot: true,
+        enableHttpEndpoint: true,
       },
       { parent: this },
     )

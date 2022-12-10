@@ -5,7 +5,7 @@ import './styles.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import React from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import { SessionProvider } from 'next-auth/react'
+import { SessionProvider, useSession } from 'next-auth/react'
 import { FeatureToggles } from '../config/featureToggle.type'
 import FeatureToggleContext from '../context/FeatureToggleContext'
 

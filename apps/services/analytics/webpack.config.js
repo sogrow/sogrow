@@ -10,6 +10,9 @@ module.exports = {
   target: 'node',
   resolve: {
     extensions: ['.mjs', '.ts', '.js'],
+    alias: {
+      '@sogrow/services/infra/observation': path.resolve(__dirname, '../../../libs/services/infra/observation/src/index.ts'),
+    },
   },
   output: {
     libraryTarget: 'commonjs2',
@@ -20,6 +23,9 @@ module.exports = {
     nodeExternals(),
     nodeExternals({
       modulesDir: path.resolve('../../../node_modules'),
+    }),
+    nodeExternals({
+      allowlist: [/^@sogrow\/services/],
     }),
   ],
   module: {

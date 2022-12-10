@@ -19,11 +19,18 @@ export const baseServerlessConfigProvider: Serverless['provider'] = {
 export const baseServerlessConfig: Partial<Serverless> = {
   frameworkVersion: '3',
   service: 'base',
+  useDotenv: true,
   package: {
     individually: true,
     excludeDevDependencies: true,
   },
-  plugins: ['serverless-webpack', 'serverless-offline', 'serverless-domain-manager', 'serverless-vpc-discovery'],
+  plugins: [
+    'serverless-webpack',
+    'serverless-webpack-prisma',
+    'serverless-offline',
+    'serverless-domain-manager',
+    'serverless-vpc-discovery',
+  ],
   custom: {
     customDomain: {
       domainName: env.domainName,
