@@ -16,6 +16,6 @@ environment=$2
 echo -e "[${BLUE}INFO${NC}] Decrypting $service in $environment environment ⚙️"
 
 # Decrypt the encrypted environment files
-npx senv decrypt apps/services/$service/.env.$environment.encrypted > apps/services/$service/.env.$environment
+npx senv decrypt apps/services/"$service"/.env."$environment".encrypted > apps/services/"$service"/.env."$environment"
 
 echo -e "[${BLUE}INFO${NC}] Done ✅"
