@@ -63,7 +63,7 @@ jobs:
       - run: npm ci
 
       - name: 'Decrypt env files'
-        run: echo ${{ secrets.DOTENV_PREVIEW_PASS }} >> .env.preview.pass && ./scripts/env-decrypt.sh ${{ matrix.app }} preview
+        run: echo "${{ secrets.DOTENV_PREVIEW_PASS }}" >> .env.preview.pass && ./scripts/env-decrypt.sh ${{ matrix.app }} preview
         timeout-minutes: 1
 
       - name: Deploy Serverless
@@ -95,7 +95,7 @@ jobs:
       - run: npm ci
 
       - name: 'Decrypt env files'
-        run: echo ${{ secrets.DOTENV_PROD_PASS }} >> .env.prod.pass && ./scripts/env-decrypt.sh ${{ matrix.app }} prod
+        run: echo "${{ secrets.DOTENV_PROD_PASS }}" >> .env.prod.pass && ./scripts/env-decrypt.sh ${{ matrix.app }} prod
         timeout-minutes: 1
 
       - name: Deploy Serverless
