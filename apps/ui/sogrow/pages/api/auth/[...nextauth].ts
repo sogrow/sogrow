@@ -10,6 +10,9 @@ export const authOption: NextAuthOptions = {
       version: '2.0',
     }),
   ],
+  session: {
+    strategy: 'jwt',
+  },
 }
 
 const sogrowAdapter = SogrowAdapter()

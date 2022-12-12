@@ -1,4 +1,4 @@
-import { Adapter } from 'next-auth/adapters'
+import { Adapter, AdapterSession } from 'next-auth/adapters'
 import SogrowClient from './sogrow-client'
 
 export default function SogrowAdapter(client: SogrowClient, options = {}): Adapter {
@@ -10,40 +10,34 @@ export default function SogrowAdapter(client: SogrowClient, options = {}): Adapt
       return client.getUser(id)
     },
     async getUserByEmail(email) {
-      return
+      return client.getUserByEmail(email)
     },
     async getUserByAccount({ providerAccountId, provider }) {
-      return
+      return client.getUserByAccountId(providerAccountId, provider)
     },
     async updateUser(user) {
-      return
+      return client.updateUser(user)
     },
     async deleteUser(userId) {
-      return
+      return client.deleteUser(userId)
     },
     async linkAccount(account) {
-      return
+      return client.linkAccount(account)
     },
     async unlinkAccount({ providerAccountId, provider }) {
-      return
+      return client.unlinkAccount(providerAccountId, provider)
     },
-    async createSession({ sessionToken, userId, expires }) {
-      return
+    async createSession(session: { sessionToken: string; userId: string; expires: Date }) {
+      return client.createSession(session)
     },
     async getSessionAndUser(sessionToken) {
-      return
+      return client.getSessionAndUser(sessionToken)
     },
-    async updateSession({ sessionToken }) {
-      return
+    async updateSession(session: Partial<AdapterSession> & Pick<AdapterSession, 'sessionToken'>) {
+      return client.updateSession(session)
     },
     async deleteSession(sessionToken) {
-      return
-    },
-    async createVerificationToken({ identifier, expires, token }) {
-      return
-    },
-    async useVerificationToken({ identifier, token }) {
-      return
+      return client.deleteSession(sessionToken)
     },
   }
 }

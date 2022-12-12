@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
-import { AdapterUser } from 'next-auth/adapters'
-import { PrismaService } from './prisma.service'
+import { Adapter, AdapterUser } from 'next-auth/adapters'
+import { PrismaService } from '@sogrow/services/infra/gateway/dal'
+import { CoreUtils } from '@sogrow/services/domain/util'
 
 @Controller('user')
 export class UserController {
@@ -15,14 +16,28 @@ export class UserController {
     return this.prisma.user.create({ data })
   }
 
-  @Get(':id')
-  getUser(@Param() params): Promise<AdapterUser> {
-    this.logger.info(`Received request to get user [id=${params.id}]`)
-    return this.prisma.user.findUnique({ where: { id: params.id } })
+  @Get()
+  getUser(@Query() query: { id?: string; email?: string }): Promise<AdapterUser> {
+    if (query?.id) {
+      this.logger.info(`Received request to get user [id=${query.id}]`)
+      return this.prisma.user.findUnique({ where: { id: query.id } })
+    } else if (query?.email) {
+      this.logger.info(`Received request to get user [email=${CoreUtils.hideSensitive(query.email)}]`)
+      return this.prisma.user.findUnique({ where: { email: query.email } })
+    }
+    this.logger.warn(`User not found`)
+    throw new NotFoundException('USER_NOT_FOUND')
   }
 
-  @Get()
-  getHello() {
-    return 'Hello from Identity'
+  @Put(':id')
+  updateUser(@Param() id: string, @Body() data: Partial<AdapterUser>): Promise<AdapterUser> {
+    this.logger.info(`Received request to update user [id=${id}]`)
+    return this.prisma.user.update({ where: { id }, data })
+  }
+
+  @Delete(':id')
+  deleteUser(@Param() id: string): Promise<AdapterUser> {
+    this.logger.info(`Receive request to delete user [id=${id}]`)
+    return this.prisma.user.delete({ where: { id } })
   }
 }

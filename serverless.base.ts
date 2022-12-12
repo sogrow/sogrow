@@ -14,7 +14,7 @@ export const baseServerlessConfigProvider: Serverless['provider'] = {
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
   },
   region: env.region,
-  timeout: 10,
+  timeout: 30,
 }
 
 export const baseServerlessConfig: Partial<Serverless> = {
