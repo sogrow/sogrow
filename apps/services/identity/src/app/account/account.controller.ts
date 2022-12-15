@@ -23,7 +23,7 @@ export class AccountController {
       where: { provider_providerAccountId: { providerAccountId: query.providerAccountId, provider: query.provider } },
       select: { user: true },
     })
-    return account.user
+    return account?.user || null
   }
 
   @Delete()
