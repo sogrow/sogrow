@@ -116,5 +116,8 @@
     "*.{js,json,css,scss,md,ts,html}": [
       "nx format:write --uncommitted"
     ]
+  },
+  "prisma": {
+    "schema": "libs/services/infra/gateway/src/lib/dal/prisma/prisma.schema"
   }
 }

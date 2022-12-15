@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
-import { AdapterAccount, AdapterUser } from 'next-auth/adapters'
+import { AdapterUser } from 'next-auth/adapters'
 import { Account, Prisma } from '@prisma/client'
 
 @Controller('account')
