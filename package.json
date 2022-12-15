@@ -118,6 +118,6 @@
     ]
   },
   "prisma": {
-    "schema": "libs/services/infra/gateway/src/lib/dal/prisma/prisma.schema"
+    "schema": "libs/services/infra/gateway/src/lib/dal/prisma/schema.prisma"
   }
 }

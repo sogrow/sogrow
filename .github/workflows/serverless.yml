@@ -62,11 +62,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
 
-      - name: 'Decrypt env files'
+      - name: Decrypt env files
         run: ./scripts/env-decrypt.sh ${{ matrix.app }} preview
         timeout-minutes: 1
         env:
           DOTENV_PASS: ${{ secrets.DOTENV_PASS }}
+
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema ./libs/services/infra/gateway/src/lib/dal/prisma/schema.prisma
 
       - name: Deploy Serverless
         env:
@@ -96,11 +99,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
 
-      - name: 'Decrypt env files'
+      - name: Decrypt env files
         run: ./scripts/env-decrypt.sh ${{ matrix.app }} prod
         timeout-minutes: 1
         env:
           DOTENV_PASS: ${{ secrets.DOTENV_PASS }}
+
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema ./libs/services/infra/gateway/src/lib/dal/prisma/schema.prisma
 
       - name: Deploy Serverless
         env:
