@@ -1,8 +1,16 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
 import SogrowAdapter from '../../../lib/next-auth-custom-adapter'
+import SogrowClient from '../../../lib/sogrow-client'
+import * as process from 'process'
+
+const sogrowBaseURL = process.env.BASE_URL_IDENTITY
+
+const sogrowClient = new SogrowClient({ baseURL: sogrowBaseURL, validateStatus: (status: number) => status >= 200 && status < 300 })
+const sogrowAdapter = SogrowAdapter(sogrowClient)
 
 export const authOption: NextAuthOptions = {
+  adapter: sogrowAdapter,
   providers: [
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID,
@@ -15,8 +23,4 @@ export const authOption: NextAuthOptions = {
   },
 }
 
-const sogrowAdapter = SogrowAdapter()
-export default NextAuth({
-  adapter: sogrowAdapter,
-  providers: authOption.providers,
-})
+export default NextAuth(authOption)
