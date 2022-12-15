@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common'
-import { UserController } from './user.controller'
 import { PrismaModule } from '@sogrow/services/infra/gateway/dal'
 
 @Module({
   imports: [PrismaModule],
   providers: [],
-  controllers: [UserController],
+  controllers: [],
 })
-export class UserModule {}
+export class VerificationTokenModule {}

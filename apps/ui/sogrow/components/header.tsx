@@ -6,7 +6,6 @@ import { useFeatureToggle } from '../hooks/useFeatureToggle'
 
 export function Header() {
   const { data: session } = useSession()
-  console.log({ session })
   const showSocialLogin = useFeatureToggle('useSocialLogin')
 
   let socialLogin = null

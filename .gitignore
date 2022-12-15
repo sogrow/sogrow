@@ -45,6 +45,7 @@ Thumbs.db
 
 # Serverless
 /**/.serverless/*
+/**/.webpack/*
 
 # Sensitive
 .env.pass
