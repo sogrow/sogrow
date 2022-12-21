@@ -36,8 +36,10 @@ const serverlessConfig: Partial<Serverless> = {
         },
       ],
       environment: {
-        TOKEN_SECRET: '${env:TOKEN_SECRET}',
+        JWT_SECRET: '${env:JWT_SECRET}',
+        JWT_EXPIRATION_TIME: '${env:JWT_EXPIRATION_TIME}',
         DATABASE_URL: '${env:DATABASE_URL}',
+        TWITTER_BASE_URL: '${env:TWITTER_BASE_URL}',
       },
     },
   },

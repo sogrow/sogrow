@@ -5,17 +5,10 @@ import { UserModule } from './user/user.module'
 import { ConfigModule } from '@nestjs/config'
 import { SessionModule } from './session/session.module'
 import { AccountModule } from './account/account.module'
-import { VerificationTokenModule } from './verification-token/verification-token.module'
+import { AuthModule } from '@sogrow/services/web/auth'
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    LoggerModule.forRoot(),
-    UserModule,
-    SessionModule,
-    AccountModule,
-    VerificationTokenModule,
-  ],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), LoggerModule.forRoot(), AuthModule, UserModule, SessionModule, AccountModule],
   controllers: [],
   providers: [],
 })
