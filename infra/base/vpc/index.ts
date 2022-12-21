@@ -71,6 +71,7 @@ export class VPC extends pulumi.ComponentResource {
         ],
         egress: [
           {
+            description: 'Allow all outbound traffic',
             fromPort: 0,
             toPort: 0,
             protocol: '-1',

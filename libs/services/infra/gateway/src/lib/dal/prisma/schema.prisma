@@ -1,5 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator prismaClassGenerator {
+  provider = "prisma-class-generator"
+  output = "../generated"
+  useSwagger = false
+  dryRun = false
+}
 
 generator client {
   provider = "prisma-client-js"

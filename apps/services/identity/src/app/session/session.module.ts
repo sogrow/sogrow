@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
 import { SessionController } from './session.controller'
-import { PrismaModule } from '@sogrow/services/infra/gateway/dal'
+import { DalModule } from '@sogrow/services/infra/gateway/dal'
 
 @Module({
-  imports: [PrismaModule],
+  imports: [DalModule],
   providers: [],
   controllers: [SessionController],
 })

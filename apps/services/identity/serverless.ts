@@ -38,6 +38,7 @@ const serverlessConfig: Partial<Serverless> = {
       environment: {
         TOKEN_SECRET: '${env:TOKEN_SECRET}',
         DATABASE_URL: '${env:DATABASE_URL}',
+        TWITTER_BASE_URL: '${env:TWITTER_BASE_URL}',
       },
     },
   },
