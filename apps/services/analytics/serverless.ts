@@ -1,14 +1,18 @@
 import type { Serverless } from 'serverless/aws'
-import { baseServerlessConfig } from '../../../serverless.base'
+import { baseServerlessConfig } from '../../../serverless/serverless.base'
 
 const serverlessConfig: Partial<Serverless> = {
   ...baseServerlessConfig,
-  service: 'analytics',
+  service: '${self:custom.appName}-${self:custom.serviceName}',
   provider: {
     ...baseServerlessConfig.provider,
+    deploymentBucket: {
+      name: '${self:custom.appName}-${self:custom.serviceName}-${self:provider.stage}',
+    },
   },
   custom: {
     ...baseServerlessConfig.custom,
+    serviceName: 'analytics',
     customDomain: {
       ...baseServerlessConfig.custom.customDomain,
       basePath: 'analytics',

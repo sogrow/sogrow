@@ -38,7 +38,6 @@ export class RDS extends pulumi.ComponentResource {
         masterUsername: args.masterUsername,
         masterPassword: args.masterPassword,
         skipFinalSnapshot: true,
-        enableHttpEndpoint: true,
       },
       { parent: this },
     )
