@@ -1,5 +1,6 @@
 import type { Serverless } from 'serverless/aws'
-import { env, envName } from './environment/environment.serverless'
+import { env, envName } from '../environment/environment.serverless'
+
 const path = require('path')
 
 console.log(`-------------- USING ENV: ${env.name} ----------------`)
@@ -19,6 +20,7 @@ export const baseServerlessConfigProvider: Serverless['provider'] = {
 
 export const baseServerlessConfig: Partial<Serverless> = {
   frameworkVersion: '3',
+  app: 'sogrow',
   service: 'base',
   useDotenv: true,
   package: {
@@ -33,6 +35,7 @@ export const baseServerlessConfig: Partial<Serverless> = {
     'serverless-vpc-discovery',
   ],
   custom: {
+    appName: 'sogrow',
     customDomain: {
       domainName: env.domainName,
       basePath: '',
