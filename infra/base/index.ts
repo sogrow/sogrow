@@ -8,5 +8,5 @@ const { vpc, securityGroup } = new VPC('main-vpc')
 
 export const vpcId = vpc.vpcId
 export const privateSubnetIds = vpc.privateSubnetIds
-export const publicSubnetIds = vpc.privateSubnetIds
+export const publicSubnetIds = vpc.publicSubnetIds
 export const securityGroupId = securityGroup.id

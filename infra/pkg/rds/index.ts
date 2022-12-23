@@ -3,6 +3,7 @@ import * as aws from '@pulumi/aws'
 import * as awsx from '@pulumi/awsx'
 
 export class RDS extends pulumi.ComponentResource {
+  rds: aws.rds.Cluster
   dbSubnet: aws.rds.SubnetGroup
   constructor(
     name: string,
@@ -10,21 +11,21 @@ export class RDS extends pulumi.ComponentResource {
       clusterIdentifier: string
       masterPassword: string
       masterUsername: string
-      vpc: awsx.ec2.DefaultVpc
-      sg: aws.ec2.SecurityGroup
+      privateSubnetIds: pulumi.Output<any[]>
+      securityGroupId: pulumi.Output<any>
     },
     opts: any = {},
   ) {
     super('pkg:index:RDS', name, {}, opts)
 
     this.dbSubnet = new aws.rds.SubnetGroup('dbsubnet', {
-      subnetIds: args.vpc.publicSubnetIds,
+      subnetIds: args.privateSubnetIds,
       tags: {
-        Name: 'sogrow-rds-public-subnet',
+        Name: 'sogrow-rds-private-subnet',
       },
     })
 
-    const postgresql = new aws.rds.Cluster(
+    this.rds = new aws.rds.Cluster(
       'postgresql',
       {
         availabilityZones: ['eu-central-1a', 'eu-central-1b', 'eu-central-1c'],
@@ -34,7 +35,7 @@ export class RDS extends pulumi.ComponentResource {
         engine: 'aurora-postgresql',
         engineMode: 'serverless',
         dbSubnetGroupName: this.dbSubnet.name,
-        vpcSecurityGroupIds: [args.sg.id],
+        vpcSecurityGroupIds: [args.securityGroupId],
         masterUsername: args.masterUsername,
         masterPassword: args.masterPassword,
         skipFinalSnapshot: true,

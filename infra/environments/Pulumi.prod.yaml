@@ -13,4 +13,3 @@ config:
     secure: AAABAHc1nsYWexyITpgtGHaR6XEWOF0wOKr+7yrdWXKF251UGXLYVVUse7M4cTINnJFNDFynUS9YItUZaBc0oRtovxgyGgENxmlWQg==
   sogrow:rds.masterUsername:
     secure: AAABAEyAKiOS1S82yJxhoiwASXtCa2kexH0K/NU6OY4k7epJ2hc=
-  sogrow:vpc.name: vpc-prod

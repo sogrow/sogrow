@@ -15,7 +15,7 @@ export class VPC extends pulumi.ComponentResource {
         tags: {
           Name: `main-vpc`,
         },
-        numberOfAvailabilityZones: 2,
+        numberOfAvailabilityZones: 3,
         natGateways: {
           // Only one NAT Gateway should be sufficient for now to save cost
           strategy: awsx.ec2.NatGatewayStrategy.Single,
