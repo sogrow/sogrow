@@ -57,13 +57,13 @@ export const baseServerlessConfig: Partial<Serverless> = {
       subnets: [
         {
           tagKey: 'Name',
-          tagValues: ['default-subnet'],
+          tagValues: ['main-private-subnet-1', 'main-private-subnet-2', 'main-private-subnet-3'],
         },
       ],
       securityGroups: [
         {
           tagKey: 'Name',
-          tagValues: ['sogrow-security-group'],
+          tagValues: ['security-group'],
         },
       ],
     },

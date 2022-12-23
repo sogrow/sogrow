@@ -1,6 +1,6 @@
 import * as pulumi from '@pulumi/pulumi'
 import * as aws from '@pulumi/aws'
-import { getDomainAndSubdomain } from '../utils/utils'
+import { getDomainAndSubdomain } from '../../utils/utils'
 
 export class ACM extends pulumi.ComponentResource {
   certificate: aws.acm.Certificate

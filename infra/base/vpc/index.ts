@@ -3,24 +3,47 @@ import * as aws from '@pulumi/aws'
 import * as awsx from '@pulumi/awsx'
 
 export class VPC extends pulumi.ComponentResource {
-  vpc: awsx.ec2.DefaultVpc
+  vpc: awsx.ec2.Vpc
   securityGroup: aws.ec2.SecurityGroup
 
-  constructor(name: string, args: { vpcName: string }, opts: any = {}) {
+  constructor(name: string, args = {}, opts: any = {}) {
     super('pkg:index:vpc', name, {}, opts)
 
-    this.vpc = new awsx.ec2.DefaultVpc(
+    this.vpc = new awsx.ec2.Vpc(
       'main',
       {
         tags: {
-          Name: `${args.vpcName}`,
+          Name: `main-vpc`,
         },
+        numberOfAvailabilityZones: 3,
+        natGateways: {
+          // Only one NAT Gateway should be sufficient for now to save cost
+          strategy: awsx.ec2.NatGatewayStrategy.Single,
+        },
+        subnetSpecs: [
+          {
+            name: 'public-subnet',
+            type: awsx.ec2.SubnetType.Public,
+            cidrMask: 24,
+            tags: {
+              Name: 'main-public-subnet',
+            },
+          },
+          {
+            name: 'private-subnet',
+            type: awsx.ec2.SubnetType.Private,
+            cidrMask: 24,
+            tags: {
+              Name: 'main-private-subnet',
+            },
+          },
+        ],
       },
       { parent: this },
     )
 
     this.securityGroup = new aws.ec2.SecurityGroup(
-      'lambda-sg',
+      'security-group',
       {
         vpcId: this.vpc.vpcId,
         ingress: [
@@ -55,7 +78,7 @@ export class VPC extends pulumi.ComponentResource {
           },
         ],
         tags: {
-          Name: 'sogrow-security-group',
+          Name: 'security-group',
         },
       },
       { parent: this },
