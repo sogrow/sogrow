@@ -3,7 +3,7 @@ import { ACM } from '../pkg/acm'
 import { RDS } from '../pkg/rds'
 import { EC2 } from '../pkg/ec2'
 
-const stackConfig = new pulumi.Config('sogrow')
+const stackConfig = new pulumi.Config('environments')
 const config = {
   domainName: stackConfig.require('acm.domainName'),
   clusterIdentifier: stackConfig.require('rds.clusterIdentifier'),
