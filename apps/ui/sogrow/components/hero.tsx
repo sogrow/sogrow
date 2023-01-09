@@ -8,7 +8,7 @@ export function Hero() {
           <span className="mt-2 block sm:mt-4">Again</span>
         </p>
         <h1 className="mt-4 mb-4 max-w-md px-2 text-sm text-base text-gray-500 sm:mb-6 sm:text-lg md:mt-8 md:text-xl">
-          Engage and grow your Twitter audience with confidence without writing into the void.
+          Engage and grow your Twitter audience with confidence without writing into the void. Together with great UX by Julian!
         </h1>
         <a
           href="#join"
