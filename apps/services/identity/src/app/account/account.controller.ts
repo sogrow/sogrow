@@ -17,9 +17,20 @@ export class AccountController {
   }
 
   @Post()
-  lintAccount(@Body() data: Prisma.AccountCreateInput): Prisma.Prisma__AccountClient<Account, never> {
+  linkAccount(@Body() data: Prisma.AccountCreateInput): Prisma.Prisma__AccountClient<Account, never> {
     this.logger.info(`Received request to link account.`)
-    return this.prisma.account.create({ data })
+    return this.prisma.account.upsert({
+      where: {
+        provider_providerAccountId: {
+          providerAccountId: data.providerAccountId,
+          provider: data.provider,
+        },
+      },
+      update: {
+        ...data,
+      },
+      create: data,
+    })
   }
 
   @Get('user')
@@ -30,6 +41,14 @@ export class AccountController {
       select: { user: true },
     })
     return account?.user || null
+  }
+
+  @Get('')
+  async getAccount(@Query() query: { providerAccountId: Account['providerAccountId']; provider: string }): Promise<Account> {
+    this.logger.info(`Received request to get account [providerAccountId=${query.providerAccountId}, provider=${query.provider}]`)
+    return this.prisma.account.findUnique({
+      where: { provider_providerAccountId: { providerAccountId: query.providerAccountId, provider: query.provider } },
+    })
   }
 
   @Get('token-exchange')

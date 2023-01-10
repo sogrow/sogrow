@@ -23,7 +23,16 @@ export const authOption: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log('signin', { user, account, profile, email, credentials })
+      console.log('signIn', { user, account, profile, email, credentials })
+      if (user) {
+        const dbUser = await sogrowAdapter.getUser(user.id)
+
+        await sogrowAdapter.linkAccount({
+          ...account,
+          userId: dbUser.id,
+        })
+      }
+
       return true
     },
     async redirect({ url, baseUrl }) {
