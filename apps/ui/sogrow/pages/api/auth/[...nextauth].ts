@@ -1,8 +1,9 @@
-import NextAuth, { NextAuthOptions } from 'next-auth'
+import NextAuth, { NextAuthOptions, Session } from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
 import SogrowAdapter from '../../../lib/next-auth-custom-adapter'
 import SogrowClient from '../../../lib/sogrow-client'
 import * as process from 'process'
+import { JWT } from 'next-auth/jwt'
 
 const sogrowBaseURL = process.env.BASE_URL_IDENTITY
 
@@ -39,8 +40,8 @@ export const authOption: NextAuthOptions = {
       console.log('redirect', { url, baseUrl })
       return baseUrl
     },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken
+    async session({ session, token }: { session: Session; token: JWT }) {
+      session.accessToken = token.accessToken as string
 
       return session
     },
