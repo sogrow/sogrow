@@ -4,7 +4,6 @@ import { PrismaService } from '@sogrow/services/infra/gateway/dal'
 import { AdapterUser } from 'next-auth/adapters'
 import { Account, Prisma } from '@prisma/client'
 import { AccountService } from './account.service'
-import axios from 'axios'
 
 @Controller('account')
 export class AccountController {
@@ -41,14 +40,6 @@ export class AccountController {
       select: { user: true },
     })
     return account?.user || null
-  }
-
-  @Get('')
-  async getAccount(@Query() query: { providerAccountId: Account['providerAccountId']; provider: string }): Promise<Account> {
-    this.logger.info(`Received request to get account [providerAccountId=${query.providerAccountId}, provider=${query.provider}]`)
-    return this.prisma.account.findUnique({
-      where: { provider_providerAccountId: { providerAccountId: query.providerAccountId, provider: query.provider } },
-    })
   }
 
   @Get('token-exchange')
