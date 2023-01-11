@@ -1,19 +1,35 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Headers, Post, Query, UnauthorizedException } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
 import { AdapterUser } from 'next-auth/adapters'
 import { Account, Prisma } from '@prisma/client'
+import { AccountService } from './account.service'
 
 @Controller('account')
 export class AccountController {
-  constructor(private readonly logger: PinoLogger, private readonly prisma: PrismaService) {
+  constructor(
+    private readonly logger: PinoLogger,
+    private readonly prisma: PrismaService,
+    private readonly accountService: AccountService,
+  ) {
     this.logger.setContext(AccountController.name)
   }
 
   @Post()
-  lintAccount(@Body() data: Prisma.AccountCreateInput): Prisma.Prisma__AccountClient<Account, never> {
+  linkAccount(@Body() data: Prisma.AccountCreateInput): Prisma.Prisma__AccountClient<Account, never> {
     this.logger.info(`Received request to link account.`)
-    return this.prisma.account.create({ data })
+    return this.prisma.account.upsert({
+      where: {
+        provider_providerAccountId: {
+          providerAccountId: data.providerAccountId,
+          provider: data.provider,
+        },
+      },
+      update: {
+        ...data,
+      },
+      create: data,
+    })
   }
 
   @Get('user')
@@ -26,6 +42,19 @@ export class AccountController {
     return account?.user || null
   }
 
+  @Get('token-exchange')
+  async exchangeToken(
+    @Query() query: { providerAccountId: Account['providerAccountId']; provider: string },
+    @Headers('authorization') bearer: string,
+  ) {
+    this.logger.info(`Received request to exchange token [provider=${query.provider}]`)
+    this.assertProviderIsKnown(query.provider)
+    const token = this.assertBearerTokenIsPresent(bearer)
+    const access_token = await this.accountService.exchangeToken(query.providerAccountId, query.provider, token)
+    this.logger.info(`Access Token successfully exchanged`)
+    return { access_token }
+  }
+
   @Delete()
   unlinkAccount(
     @Query() query: { providerAccountId: Account['providerAccountId']; provider: string },
@@ -34,5 +63,25 @@ export class AccountController {
     return this.prisma.account.delete({
       where: { provider_providerAccountId: { providerAccountId: query.providerAccountId, provider: query.provider } },
     })
+  }
+
+  private assertProviderIsKnown(provider: string) {
+    if (provider !== 'twitter') {
+      this.logger.warn(`Invalid provider`)
+      throw new UnauthorizedException(`UNAUTHORIZED`)
+    }
+  }
+
+  private assertBearerTokenIsPresent(bearer?: string) {
+    if (!bearer) {
+      this.logger.warn(`Invalid or empty bearer token provided`)
+      throw new UnauthorizedException(`UNAUTHORIZED`)
+    }
+
+    if (!bearer.startsWith('Bearer')) {
+      this.logger.warn(`Invalid or empty bearer token provided`)
+      throw new UnauthorizedException(`UNAUTHORIZED`)
+    }
+    return bearer.split(' ')[1]
   }
 }

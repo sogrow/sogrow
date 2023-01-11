@@ -1,8 +1,9 @@
-import NextAuth, { NextAuthOptions } from 'next-auth'
+import NextAuth, { NextAuthOptions, Session } from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
 import SogrowAdapter from '../../../lib/next-auth-custom-adapter'
 import SogrowClient from '../../../lib/sogrow-client'
 import * as process from 'process'
+import { JWT } from 'next-auth/jwt'
 
 const sogrowBaseURL = process.env.BASE_URL_IDENTITY
 
@@ -20,6 +21,32 @@ export const authOption: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+  },
+  callbacks: {
+    async signIn({ user, account }) {
+      if (user) {
+        const dbUser = await sogrowAdapter.getUser(user.id)
+
+        await sogrowAdapter.linkAccount({
+          ...account,
+          userId: dbUser.id,
+        })
+      }
+
+      return true
+    },
+    async session({ session, token }: { session: Session; token: JWT }) {
+      session.accessToken = token.accessToken as string
+
+      return session
+    },
+    async jwt({ token, user, account }) {
+      if (user) {
+        token.accessToken = await sogrowClient.exchangeToken(account.providerAccountId, account.provider, account.access_token)
+      }
+
+      return token
+    },
   },
 }
 

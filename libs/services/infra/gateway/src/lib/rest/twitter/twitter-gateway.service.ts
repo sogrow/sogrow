@@ -4,7 +4,8 @@ import { PinoLogger } from 'nestjs-pino'
 import { AxiosInstance } from 'axios'
 import { AxiosClientFactory } from '@sogrow/services/infra/instrumentation'
 import { UserResponseDto } from './dto/user-response.dto'
-import { UserInfo } from '@sogrow/services/domain/bom'
+import { User } from '@sogrow/services/domain/bom'
+import { reporter } from 'next/dist/trace/report'
 
 @Injectable()
 export class TwitterGatewayService {
@@ -16,21 +17,23 @@ export class TwitterGatewayService {
   ) {
     this.logger.setContext(TwitterGatewayService.name)
     this.client = axiosClientFactory.build({
-      baseURL: this.configService.get('backend.twitter.base-url'),
+      baseURL: this.configService.get('TWITTER_BASE_URL'),
       validateStatus: (status: number) => status >= 200 && status < 300,
     })
   }
 
-  getUserInfo(bearer: string): Promise<UserInfo | void> {
+  async getUserInfo(token: string): Promise<User> {
+    this.logger.info(`Preparing request to get User Info.`)
+
     return this.client
       .get<UserResponseDto>(`/users/me`, {
         headers: {
-          Authorization: `Bearer ${bearer}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
         this.logger.info(`Twitter User Info successfully returned. [status=${response.status}]`)
-        return this.toAccount(response?.data)
+        return this.toUserInfo(response?.data)
       })
       .catch((error) => {
         this.logger.error(
@@ -38,15 +41,15 @@ export class TwitterGatewayService {
             error.response?.data,
           )}]`,
         )
-        throw new BadGatewayException(`GATEWAY_TWITTER_EXCEPTION`)
+        throw new BadGatewayException(`GATEWAY_EXCEPTION_TWITTER_EXCEPTION`)
       })
   }
 
-  toAccount(dto: UserResponseDto): UserInfo {
-    const userInfo = new UserInfo()
-    userInfo.id = Number(dto.id)
-    userInfo.name = dto.name
-    userInfo.username = dto.username
+  private toUserInfo({ data }: UserResponseDto): User {
+    const userInfo = new User()
+    userInfo.id = data.id
+    userInfo.name = data.name
+    userInfo.username = data.username
     return userInfo
   }
 }

@@ -1,6 +1,7 @@
-import { DynamicModule, Module } from '@nestjs/common'
+import { DynamicModule, Global, Module } from '@nestjs/common'
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino'
 
+@Global()
 @Module({})
 export class LoggerModule {
   static forRoot(): DynamicModule {
