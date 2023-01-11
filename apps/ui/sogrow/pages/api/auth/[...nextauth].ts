@@ -24,7 +24,6 @@ export const authOption: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account }) {
-      console.log('signIn', { user, account })
       if (user) {
         const dbUser = await sogrowAdapter.getUser(user.id)
 
@@ -35,10 +34,6 @@ export const authOption: NextAuthOptions = {
       }
 
       return true
-    },
-    async redirect({ url, baseUrl }) {
-      console.log('redirect', { url, baseUrl })
-      return baseUrl
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       session.accessToken = token.accessToken as string
