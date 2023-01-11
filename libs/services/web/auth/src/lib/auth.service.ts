@@ -9,9 +9,6 @@ export class AuthService {
 
   createJwtToken(user: User): string {
     const payload = {
-      name: user.name,
-      email: user.email,
-      picture: user.picture,
       sub: user.id,
       jti: this.generateJti(),
     }

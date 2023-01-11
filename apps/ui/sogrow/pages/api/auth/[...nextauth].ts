@@ -22,8 +22,8 @@ export const authOption: NextAuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log('signIn', { user, account, profile, email, credentials })
+    async signIn({ user, account }) {
+      console.log('signIn', { user, account })
       if (user) {
         const dbUser = await sogrowAdapter.getUser(user.id)
 
@@ -39,12 +39,16 @@ export const authOption: NextAuthOptions = {
       console.log('redirect', { url, baseUrl })
       return baseUrl
     },
-    async session({ session, user, token }) {
-      console.log('session', { session, user, token })
+    async session({ session, token }) {
+      session.accessToken = token.accessToken
+
       return session
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      console.log('jwt', { token, user, account, profile, isNewUser })
+    async jwt({ token, user, account }) {
+      if (user) {
+        token.accessToken = await sogrowClient.exchangeToken(account.providerAccountId, account.provider, account.access_token)
+      }
+
       return token
     },
   },

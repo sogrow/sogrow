@@ -90,7 +90,14 @@ export default class SogrowClient {
     })
   }
 
-  exchangeToken(provider: string, token: string) {
-    return this.client.get(`/account/token-exchange/${provider}`, { headers: { Authorization: `Bearer ${token}` } })
+  exchangeToken(providerAccountId: string, provider: string, token: string) {
+    return this.client
+      .get(`/account/token-exchange`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { providerAccountId, provider },
+      })
+      .then((response) => {
+        return response.data?.access_token
+      })
   }
 }
