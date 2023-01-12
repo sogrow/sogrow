@@ -1,9 +1,10 @@
 import * as pulumi from '@pulumi/pulumi'
 import * as aws from '@pulumi/aws'
-import * as awsx from '@pulumi/awsx'
 
 export class RDS extends pulumi.ComponentResource {
   rds: aws.rds.Cluster
+  rdsInstance: aws.rds.ClusterInstance
+
   dbSubnet: aws.rds.SubnetGroup
   constructor(
     name: string,
@@ -11,6 +12,8 @@ export class RDS extends pulumi.ComponentResource {
       clusterIdentifier: string
       masterPassword: string
       masterUsername: string
+      minCapacity: number
+      maxCapacity: number
       privateSubnetIds: pulumi.Output<any[]>
       securityGroupId: pulumi.Output<any>
     },
@@ -33,12 +36,28 @@ export class RDS extends pulumi.ComponentResource {
         clusterIdentifier: args.clusterIdentifier,
         databaseName: 'sogrowdb',
         engine: 'aurora-postgresql',
-        engineMode: 'serverless',
+        engineMode: 'provisioned',
+        engineVersion: '14.5',
+        serverlessv2ScalingConfiguration: {
+          minCapacity: args.minCapacity,
+          maxCapacity: args.maxCapacity,
+        },
         dbSubnetGroupName: this.dbSubnet.name,
         vpcSecurityGroupIds: [args.securityGroupId],
         masterUsername: args.masterUsername,
         masterPassword: args.masterPassword,
         skipFinalSnapshot: true,
+      },
+      { parent: this },
+    )
+
+    this.rdsInstance = new aws.rds.ClusterInstance(
+      'postgresql-instance',
+      {
+        clusterIdentifier: this.rds.id,
+        instanceClass: 'db.serverless',
+        engine: 'aurora-postgresql',
+        engineVersion: this.rds.engineVersion,
       },
       { parent: this },
     )

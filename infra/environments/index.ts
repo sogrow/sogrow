@@ -10,6 +10,10 @@ const config = {
   masterUsername: stackConfig.require('rds.masterUsername'),
   masterPassword: stackConfig.require('rds.masterPassword'),
   publicKey: stackConfig.require('ec2.keyPair.publicKey'),
+  rds: {
+    minCapacity: stackConfig.require('rds.minCapacity'),
+    maxCapacity: stackConfig.require('rds.maxCapacity'),
+  },
 }
 
 const global = new pulumi.StackReference('sogrow/base/global')
@@ -28,6 +32,8 @@ const { rds } = new RDS('postgresql', {
   clusterIdentifier: config.clusterIdentifier,
   masterUsername: config.masterUsername,
   masterPassword: config.masterPassword,
+  minCapacity: Number(config.rds.minCapacity),
+  maxCapacity: Number(config.rds.maxCapacity),
   securityGroupId,
   privateSubnetIds,
 })
