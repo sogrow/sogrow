@@ -27,10 +27,12 @@ export const authOption: NextAuthOptions = {
       if (user) {
         const dbUser = await sogrowAdapter.getUser(user.id)
 
-        await sogrowAdapter.linkAccount({
-          ...account,
-          userId: dbUser.id,
-        })
+        if (dbUser) {
+          await sogrowAdapter.linkAccount({
+            ...account,
+            userId: dbUser.id,
+          })
+        }
       }
 
       return true
