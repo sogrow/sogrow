@@ -1,4 +1,5 @@
 import { User } from './user'
+import { SocialAccount } from './social_account'
 
 export class Account {
   id: string
@@ -25,5 +26,11 @@ export class Account {
 
   session_state?: string
 
+  createdAt: Date
+
+  updatedAt: Date
+
   user: User
+
+  SocialAccount?: SocialAccount
 }
