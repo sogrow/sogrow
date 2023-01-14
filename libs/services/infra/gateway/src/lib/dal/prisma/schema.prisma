@@ -1,13 +1,12 @@
-
 generator prismaClassGenerator {
-  provider = "prisma-class-generator"
-  output = "../generated"
+  provider   = "prisma-class-generator"
+  output     = "../generated"
   useSwagger = false
-  dryRun = false
+  dryRun     = false
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -16,23 +15,154 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+model User {
+  id                  String          @id @default(cuid())
+  name                String?
+  email               String?         @unique
+  emailVerified       DateTime?
+  image               String?
+  trialEndsAt         DateTime?       @db.Date
+  completedOnboarding Boolean         @default(false)
+  userPlan            UserPlan        @default(TRIAL)
+  userRole            UserRole        @default(USER)
+  locale              String?
+  country             String?
+  timeZone            String?         @db.VarChar(10)
+  followersCount      Int             @default(0) @db.Integer
+  accounts            Account[]
+  sessions            Session[]
+  feedback            Feedback[]
+  socialAccounts      SocialAccount[]
+  slots               Slot[]
+  posts               Post[]
+  updatedAt           DateTime        @default(now()) @updatedAt
+  createdAt           DateTime        @default(now())
+}
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SocialAccount SocialAccount?
 
   @@unique([provider, providerAccountId])
+}
+
+model SocialAccount {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account        Account  @relation(fields: [accountId], references: [id])
+  accountId      String   @unique
+  followersCount Int      @db.Integer
+  postsCount     Int      @db.Integer
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+
+  @@unique([userId, accountId])
+}
+
+model Slot {
+  id                String     @id @default(cuid())
+  userId            String
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day               Weekday
+  time              DateTime?  @db.Time
+  relativeTimeStart DateTime?  @db.Time
+  relativeTimeEnd   DateTime?  @db.Time
+  timeOfDay         TimeOfDay?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @default(now()) @updatedAt
+}
+
+model Post {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body        String?      @db.Text
+  postStatus  PostStatus   @default(DRAFT)
+  socialPosts SocialPost[]
+  postMeta    PostMeta[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt
+  Schedule    Schedule[]
+}
+
+model PostMeta {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  metaUrl   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model SocialPost {
+  id                 String              @id @default(cuid())
+  postId             String
+  post               Post                @relation(fields: [postId], references: [id], onDelete: Cascade)
+  body               String?             @db.Text
+  accountId          String
+  parentSocialPostId String?
+  socialId           String?             @db.Text
+  socialLink         String?             @db.Text
+  postStatus         PostStatus          @default(DRAFT)
+  publishedAt        DateTime?           @db.Date
+  socialPostHistory  SocialPostHistory[]
+  updatedAt          DateTime?           @default(now()) @updatedAt
+  createdAt          DateTime?           @default(now())
+  Schedule           Schedule[]
+}
+
+model SocialPostHistory {
+  id           String     @id @default(cuid())
+  socialPostId String
+  socialPost   SocialPost @relation(fields: [socialPostId], references: [id], onDelete: Cascade)
+  linkClicks   Int?       @db.Integer
+  views        Int?       @db.Integer
+  likes        Int?       @db.Integer
+  shares       Int?       @db.Integer
+  profileViews Int?       @db.Integer
+  replies      Int?       @db.Integer
+  followers    Int?       @db.Integer
+  createdAt    DateTime?  @default(now())
+  updatedAt    DateTime?  @default(now()) @updatedAt
+}
+
+model Schedule {
+  id                String     @id @default(cuid())
+  postId            String
+  post              Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  socialPostId      String
+  socialPost        SocialPost @relation(fields: [socialPostId], references: [id], onDelete: Cascade)
+  scheduledDateTime DateTime   @db.Date
+  scheduledTime     DateTime   @db.Time
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @default(now()) @updatedAt
+
+  @@unique([postId, socialPostId])
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  csat      CSAT
+  message   String?  @db.Text
+  createdAt DateTime @default(now())
 }
 
 model Session {
@@ -43,20 +173,65 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-}
-
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Weekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum TimeOfDay {
+  MORNING
+  AFTERNOON
+  EVENING
+  NIGHT
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  DELETED
+}
+
+enum CSAT {
+  VERY_DISSATISFIED
+  DISSATISFIED
+  NEUTRAL
+  SATISFIED
+  VERY_SATISFIED
+}
+
+enum MimeType {
+  IMAGE
+  GIF
+  VIDEO
+  AUDIO
+  DOCUMENT
+  OTHER
+}
+
+enum UserPlan {
+  TRIAL
+  PREMIUM_1K
+  PREMIUM_10K
+  PREMIUM_100K
+  PREMIUM_X
+  CANCELLED
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
