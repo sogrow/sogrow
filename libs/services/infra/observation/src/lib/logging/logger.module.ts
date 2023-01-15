@@ -13,7 +13,14 @@ export class LoggerModule {
             transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty', options: { singleLine: true } } : undefined,
             autoLogging: false,
             redact: {
-              paths: ['req.headers.cookie', 'req.remoteAddress'],
+              paths: [
+                'req.headers.cookie',
+                'req.headers.authorization',
+                'req.headers["x-forwarded-for"]',
+                'req.remoteAddress',
+                'req.remotePort',
+              ],
+              censor: '**GDPR COMPLIANT**',
             },
           },
         }),
