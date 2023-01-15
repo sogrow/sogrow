@@ -21,7 +21,7 @@ export class AccountRepository {
     throw new NotFoundException(`User for account (accountId=${accountId}, provider=${provider}) has not been found.`)
   }
 
-  private toUser(entity: Omit<PrismaModel.User, 'accounts' | 'sessions'>): User {
+  private toUser(entity: Omit<PrismaModel.User, 'accounts' | 'sessions' | 'feedback' | 'socialAccounts' | 'slots' | 'posts'>): User {
     const user = new User()
     user.id = entity.id
     user.name = entity.name || ''
