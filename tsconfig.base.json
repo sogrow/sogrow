@@ -22,6 +22,7 @@
       "@sogrow/services/infra/instrumentation": ["libs/services/infra/instrumentation/src/index.ts"],
       "@sogrow/services/infra/observation": ["libs/services/infra/observation/src/index.ts"],
       "@sogrow/services/web/auth": ["libs/services/web/auth/src/index.ts"],
+      "@sogrow/services/web/context": ["libs/services/web/context/src/index.ts"],
       "@sogrow/ui/shared-webcomponents": ["libs/ui/shared-webcomponents/src/index.ts"]
     }
   },
