@@ -1,17 +1,32 @@
 import * as cls from 'cls-hooked'
 import { Request, Response } from 'express'
 import * as url from 'url'
-import { getCurrentInvoke } from '@vendia/serverless-express'
+import { UserPlan, UserRole } from '@sogrow/services/domain/bom'
+
+type UserContext = {
+  userId: string
+  userRole: UserRole
+  userPlan: UserPlan
+  locale: string
+  country: string
+  timeZone: string
+}
+
 export class RequestContext {
   public static nsid = 'sogrow.api'
   public readonly id: number
   public readonly request: Request
   public readonly response: Response
+
   private userId: string
+  private userRole: UserRole
+  private userPlan: UserPlan
+  private locale: string
+  private country: string
+  private timeZone: string
 
   private path: string
   private method: string
-
   constructor(request: Request, response: Response) {
     this.id = Math.random()
     this.request = request
@@ -19,8 +34,49 @@ export class RequestContext {
   }
 
   public static setupRequestContext() {
-    this.assignAuthorizerRequest()
     this.assignPathAndMethod()
+  }
+
+  public static setupUserContext(userContext: UserContext) {
+    const requestContext = RequestContext.currentRequestContext()
+    requestContext.userId = userContext.userId
+    requestContext.userRole = userContext.userRole
+    requestContext.userPlan = userContext.userPlan
+    requestContext.locale = userContext.locale
+    requestContext.country = userContext.country
+    requestContext.timeZone = userContext.timeZone
+  }
+
+  public static getPath(): string {
+    return RequestContext.currentRequestContext()?.path
+  }
+
+  public static getMethod(): string {
+    return RequestContext.currentRequestContext()?.method
+  }
+
+  public static getUserId(): string {
+    return RequestContext.currentRequestContext()?.userId
+  }
+
+  public static getUserRole(): UserRole {
+    return RequestContext.currentRequestContext()?.userRole
+  }
+
+  public static getUserPlan(): UserPlan {
+    return RequestContext.currentRequestContext()?.userPlan
+  }
+
+  public static getLocale(): string {
+    return RequestContext.currentRequestContext()?.locale
+  }
+
+  public static getCountry(): string {
+    return RequestContext.currentRequestContext()?.country
+  }
+
+  public static getTimeZone(): string {
+    return RequestContext.currentRequestContext()?.timeZone
   }
 
   public static currentRequestContext(): RequestContext {
@@ -29,15 +85,6 @@ export class RequestContext {
       return session.get(RequestContext.name)
     }
     return null
-  }
-
-  private static assignAuthorizerRequest() {
-    const { event } = getCurrentInvoke()
-    // if (!event?.requestContext?.authorizer) {
-    if (!event?.requestContext) {
-      return
-    }
-    console.log({ requestContext: event.requestContext })
   }
 
   private static assignPathAndMethod() {
