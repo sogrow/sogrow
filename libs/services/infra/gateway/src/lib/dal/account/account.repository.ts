@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { PrismaService } from '../prisma/prisma.service'
-import { User } from '@sogrow/services/domain/bom'
+import { User, UserPlan, UserRole } from '@sogrow/services/domain/bom'
 import { PrismaModel } from '../generated'
 
 @Injectable()
@@ -27,6 +27,13 @@ export class AccountRepository {
     user.name = entity.name || ''
     user.email = entity.email || ''
     user.picture = entity.image || ''
+    user.completedOnboarding = entity.completedOnboarding || false
+    user.userPlan = UserPlan[entity.userPlan] || UserPlan.TRIAL
+    user.userRole = UserRole[entity.userRole] || UserRole.USER
+    user.locale = entity.locale || ''
+    user.country = entity.country || ''
+    user.timeZone = entity.timeZone || ''
+    user.followersCount = entity.followersCount || 0
     return user
   }
 }
