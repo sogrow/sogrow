@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
-import { Adapter, AdapterUser } from 'next-auth/adapters'
+import { AdapterUser } from 'next-auth/adapters'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
 import { CoreUtils } from '@sogrow/services/domain/util'
 

@@ -2,15 +2,7 @@ import * as cls from 'cls-hooked'
 import { Request, Response } from 'express'
 import * as url from 'url'
 import { UserPlan, UserRole } from '@sogrow/services/domain/bom'
-
-type UserContext = {
-  userId: string
-  userRole: UserRole
-  userPlan: UserPlan
-  locale: string
-  country: string
-  timeZone: string
-}
+import { UserContext } from './user-context'
 
 export class RequestContext {
   public static nsid = 'sogrow.api'
@@ -19,6 +11,7 @@ export class RequestContext {
   public readonly response: Response
 
   private userId: string
+  private email: string
   private userRole: UserRole
   private userPlan: UserPlan
   private locale: string
@@ -40,6 +33,7 @@ export class RequestContext {
   public static setupUserContext(userContext: UserContext) {
     const requestContext = RequestContext.currentRequestContext()
     requestContext.userId = userContext.userId
+    requestContext.email = userContext.email
     requestContext.userRole = userContext.userRole
     requestContext.userPlan = userContext.userPlan
     requestContext.locale = userContext.locale
@@ -57,6 +51,10 @@ export class RequestContext {
 
   public static getUserId(): string {
     return RequestContext.currentRequestContext()?.userId
+  }
+
+  public static getEmail(): string {
+    return RequestContext.currentRequestContext()?.email
   }
 
   public static getUserRole(): UserRole {
