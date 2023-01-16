@@ -11,6 +11,11 @@ export class AuthService {
     const payload = {
       sub: user.id,
       jti: this.generateJti(),
+      userRole: user.userRole,
+      userPlan: user.userPlan,
+      locale: user.locale,
+      country: user.country,
+      timeZone: user.timeZone,
     }
 
     return this.jwtService.sign(payload)
