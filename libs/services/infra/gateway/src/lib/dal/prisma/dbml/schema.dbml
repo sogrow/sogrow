@@ -1,0 +1,255 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  name String
+  email String [unique]
+  emailVerified DateTime
+  image String
+  trialEndsAt DateTime
+  completedOnboarding Boolean [not null, default: false]
+  userPlan UserPlan [not null, default: 'TRIAL']
+  userRole UserRole [not null, default: 'USER']
+  locale String
+  country String
+  timeZone String
+  followersCount Int [not null, default: 0]
+  accounts Account [not null]
+  sessions Session [not null]
+  feedback Feedback [not null]
+  socialAccounts SocialAccount [not null]
+  slots Slot [not null]
+  posts Post [not null]
+  updatedAt DateTime [default: `now()`, not null]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Account {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  user User [not null]
+  SocialAccount SocialAccount
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table SocialAccount {
+  id String [pk]
+  userId String [not null]
+  user User [not null]
+  account Account [not null]
+  accountId String [unique, not null]
+  followersCount Int [not null]
+  postsCount Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+
+  indexes {
+    (userId, accountId) [unique]
+  }
+}
+
+Table Slot {
+  id String [pk]
+  userId String [not null]
+  user User [not null]
+  day Weekday [not null]
+  time DateTime
+  relativeTimeStart DateTime
+  relativeTimeEnd DateTime
+  timeOfDay TimeOfDay
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Post {
+  id String [pk]
+  userId String [not null]
+  user User [not null]
+  body String
+  postStatus PostStatus [not null, default: 'DRAFT']
+  socialPosts SocialPost [not null]
+  postMeta PostMeta [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  Schedule Schedule [not null]
+}
+
+Table PostMeta {
+  id String [pk]
+  postId String [not null]
+  post Post [not null]
+  metaUrl String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table SocialPost {
+  id String [pk]
+  postId String [not null]
+  post Post [not null]
+  body String
+  accountId String [not null]
+  parentSocialPostId String
+  socialId String
+  socialLink String
+  postStatus PostStatus [not null, default: 'DRAFT']
+  publishedAt DateTime
+  socialPostHistory SocialPostHistory [not null]
+  updatedAt DateTime [default: `now()`]
+  createdAt DateTime [default: `now()`]
+  Schedule Schedule [not null]
+}
+
+Table SocialPostHistory {
+  id String [pk]
+  socialPostId String [not null]
+  socialPost SocialPost [not null]
+  linkClicks Int
+  views Int
+  likes Int
+  shares Int
+  profileViews Int
+  replies Int
+  followers Int
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime [default: `now()`]
+}
+
+Table Schedule {
+  id String [pk]
+  postId String [not null]
+  post Post [not null]
+  socialPostId String [not null]
+  socialPost SocialPost [not null]
+  scheduledDateTime DateTime [not null]
+  scheduledTime DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+
+  indexes {
+    (postId, socialPostId) [unique]
+  }
+}
+
+Table Feedback {
+  id String [pk]
+  userId String
+  user User
+  csat CSAT [not null]
+  message String
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Session {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user User [not null]
+}
+
+Table VerificationToken {
+  identifier String [not null]
+  token String [unique, not null]
+  expires DateTime [not null]
+
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
+Enum Weekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+Enum TimeOfDay {
+  MORNING
+  AFTERNOON
+  EVENING
+  NIGHT
+}
+
+Enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  DELETED
+}
+
+Enum CSAT {
+  VERY_DISSATISFIED
+  DISSATISFIED
+  NEUTRAL
+  SATISFIED
+  VERY_SATISFIED
+}
+
+Enum MimeType {
+  IMAGE
+  GIF
+  VIDEO
+  AUDIO
+  DOCUMENT
+  OTHER
+}
+
+Enum UserPlan {
+  TRIAL
+  PREMIUM_1K
+  PREMIUM_10K
+  PREMIUM_100K
+  PREMIUM_X
+  CANCELLED
+}
+
+Enum UserRole {
+  ADMIN
+  USER
+}
+
+Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: SocialAccount.userId > User.id [delete: Cascade]
+
+Ref: SocialAccount.accountId - Account.id
+
+Ref: Slot.userId > User.id [delete: Cascade]
+
+Ref: Post.userId > User.id [delete: Cascade]
+
+Ref: PostMeta.postId > Post.id [delete: Cascade]
+
+Ref: SocialPost.postId > Post.id [delete: Cascade]
+
+Ref: SocialPostHistory.socialPostId > SocialPost.id [delete: Cascade]
+
+Ref: Schedule.postId > Post.id [delete: Cascade]
+
+Ref: Schedule.socialPostId > SocialPost.id [delete: Cascade]
+
+Ref: Feedback.userId > User.id
+
+Ref: Session.userId > User.id [delete: Cascade]
