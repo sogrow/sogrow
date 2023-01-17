@@ -10,6 +10,12 @@ export class AuthService {
   createJwtToken(user: User): string {
     const payload = {
       sub: user.id,
+      email: user.email,
+      userRole: user.userRole,
+      userPlan: user.userPlan,
+      locale: user.locale,
+      country: user.country,
+      timeZone: user.timeZone,
       jti: this.generateJti(),
     }
 
