@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { PrismaService } from '../prisma/prisma.service'
 import { User, UserPlan, UserRole } from '@sogrow/services/domain/bom'
-import { PrismaModel } from '../generated'
+import { Prisma } from '@prisma/client'
 
 @Injectable()
 export class AccountRepository {
@@ -21,7 +21,7 @@ export class AccountRepository {
     throw new NotFoundException(`User for account (accountId=${accountId}, provider=${provider}) has not been found.`)
   }
 
-  private toUser(entity: Omit<PrismaModel.User, 'accounts' | 'sessions' | 'feedback' | 'socialAccounts' | 'slots' | 'posts'>): User {
+  private toUser(entity: Prisma.UserGetPayload<{ user: boolean }['user']>): User {
     const user = new User()
     user.id = entity.id
     user.name = entity.name || ''

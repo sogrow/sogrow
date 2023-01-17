@@ -1,10 +1,3 @@
-generator prismaClassGenerator {
-  provider   = "prisma-class-generator"
-  output     = "../generated"
-  useSwagger = false
-  dryRun     = false
-}
-
 generator dbml {
   provider = "prisma-dbml-generator"
 }
