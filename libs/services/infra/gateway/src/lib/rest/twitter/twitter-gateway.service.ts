@@ -5,7 +5,6 @@ import { AxiosInstance } from 'axios'
 import { AxiosClientFactory } from '@sogrow/services/infra/instrumentation'
 import { UserResponseDto } from './dto/user-response.dto'
 import { User } from '@sogrow/services/domain/bom'
-import { reporter } from 'next/dist/trace/report'
 
 @Injectable()
 export class TwitterGatewayService {

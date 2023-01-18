@@ -4,8 +4,8 @@ import { UserRole } from './UserRole'
 export class User {
   id: string
   name: string
-  email: string
-  username: string
+  email?: string
+  username?: string
   picture: string
 
   completedOnboarding = false

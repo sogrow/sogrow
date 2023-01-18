@@ -1,12 +1,17 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Ip, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { AdapterUser } from 'next-auth/adapters'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
 import { CoreUtils } from '@sogrow/services/domain/util'
+import { IpRegistryGatewayService } from '@sogrow/services/infra/gateway'
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly logger: PinoLogger, private readonly prisma: PrismaService) {
+  constructor(
+    private readonly logger: PinoLogger,
+    private readonly prisma: PrismaService,
+    private readonly ipRegistryGatewayService: IpRegistryGatewayService,
+  ) {
     this.logger.setContext(UserController.name)
   }
 
@@ -27,6 +32,12 @@ export class UserController {
     }
     this.logger.warn(`User not found`)
     throw new NotFoundException('USER_NOT_FOUND')
+  }
+
+  @Get('geo')
+  getGeoLocation(@Ip() ip: string) {
+    this.logger.info(`Received request to get user location.`)
+    return this.ipRegistryGatewayService.getIpInfo(ip)
   }
 
   @Put(':id')
