@@ -16,5 +16,6 @@ export class User {
   locale?: string
   country?: string
   timeZone?: string
+
   followersCount?: number
 }

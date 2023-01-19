@@ -3,22 +3,20 @@ import { PinoLogger } from 'nestjs-pino'
 import { AdapterUser } from 'next-auth/adapters'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
 import { CoreUtils } from '@sogrow/services/domain/util'
-import { IpRegistryGatewayService } from '@sogrow/services/infra/gateway'
+import { UserService } from './user.service'
+import { User } from '@sogrow/services/domain/bom'
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly logger: PinoLogger,
-    private readonly prisma: PrismaService,
-    private readonly ipRegistryGatewayService: IpRegistryGatewayService,
-  ) {
+  constructor(private readonly logger: PinoLogger, private readonly prisma: PrismaService, private readonly userService: UserService) {
     this.logger.setContext(UserController.name)
   }
 
   @Post('signup')
-  createUser(@Body() data: Omit<AdapterUser, 'id'>): Promise<AdapterUser> {
+  async createUser(@Body() data: Omit<AdapterUser, 'id'>, @Ip() ip: string): Promise<AdapterUser> {
     this.logger.info(`Received request to create user.`)
-    return this.prisma.user.create({ data })
+    const user = await this.userService.createUser(data, ip)
+    return this.toAdapterUser(user)
   }
 
   @Get()
@@ -34,12 +32,6 @@ export class UserController {
     throw new NotFoundException('USER_NOT_FOUND')
   }
 
-  @Get('geo')
-  getGeoLocation(@Ip() ip: string) {
-    this.logger.info(`Received request to get user location.`)
-    return this.ipRegistryGatewayService.getIpInfo(ip)
-  }
-
   @Put(':id')
   updateUser(@Param() id: string, @Body() data: Partial<AdapterUser>): Promise<AdapterUser> {
     this.logger.info(`Received request to update user [id=${id}]`)
@@ -50,5 +42,15 @@ export class UserController {
   deleteUser(@Param() id: string): Promise<AdapterUser> {
     this.logger.info(`Receive request to delete user [id=${id}]`)
     return this.prisma.user.delete({ where: { id } })
+  }
+
+  toAdapterUser(user: User): AdapterUser {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      image: user.picture,
+      emailVerified: null,
+    }
   }
 }
