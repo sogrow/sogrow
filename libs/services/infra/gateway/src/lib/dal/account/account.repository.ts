@@ -26,7 +26,7 @@ export class AccountRepository {
     user.id = entity.id
     user.name = entity.name || ''
     user.email = entity.email || ''
-    user.picture = entity.image || ''
+    user.image = entity.image || ''
     user.completedOnboarding = entity.completedOnboarding || false
     user.userPlan = UserPlan[entity.userPlan] || UserPlan.TRIAL
     user.userRole = UserRole[entity.userRole] || UserRole.USER

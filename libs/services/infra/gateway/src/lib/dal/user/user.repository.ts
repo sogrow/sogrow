@@ -21,7 +21,7 @@ export class UserRepository {
     user.id = userEntity.id
     user.name = userEntity.name
     user.email = userEntity?.email || ''
-    user.picture = userEntity.image
+    user.image = userEntity.image
     user.completedOnboarding = userEntity.completedOnboarding
     user.userPlan = UserPlan[userEntity.userPlan]
     user.userRole = UserRole[userEntity.userRole]

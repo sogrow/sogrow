@@ -49,7 +49,7 @@ export class UserController {
       id: user.id,
       name: user.name,
       email: user.email,
-      image: user.picture,
+      image: user.image,
       emailVerified: null,
     }
   }

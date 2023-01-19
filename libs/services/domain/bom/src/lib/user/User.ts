@@ -6,7 +6,7 @@ export class User {
   name: string
   email?: string
   username?: string
-  picture: string
+  image: string
 
   completedOnboarding = false
 
