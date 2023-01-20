@@ -20,19 +20,9 @@ async function bootstrap(): Promise<Handler> {
   return serverlessExpress({ app })
 }
 
-bootstrap().then((handler) => (server = handler))
-
-function waitForServer(event: APIGatewayEvent, context: Context, callback: Callback) {
-  setImmediate(() => {
-    if (!server) {
-      waitForServer(event, context, callback)
-    } else {
-      server(event, context, callback)
-    }
-  })
-}
-
-export const handler: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-  if (server) return server(event, context, callback)
-  return waitForServer(event, context, callback)
+export const handler: Handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
+  if (!server) {
+    server = await bootstrap()
+  }
+  return server(event, context, callback)
 }
