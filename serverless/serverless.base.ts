@@ -34,6 +34,7 @@ export const baseServerlessConfig: Partial<Serverless> = {
     'serverless-domain-manager',
     'serverless-vpc-discovery',
     'serverless-api-gateway-throttling',
+    'serverless-prune-plugin',
   ],
   custom: {
     appName: 'sogrow',
@@ -71,6 +72,10 @@ export const baseServerlessConfig: Partial<Serverless> = {
     apiGatewayThrottling: {
       maxRequestsPerSecond: env.apiGatewayThrottling.maxRequestsPerSecond,
       maxConcurrentRequests: env.apiGatewayThrottling.maxConcurrentRequests,
+    },
+    prune: {
+      automatic: true,
+      number: 3,
     },
   },
   provider: {
