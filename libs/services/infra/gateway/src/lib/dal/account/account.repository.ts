@@ -1,13 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { PrismaService } from '../prisma/prisma.service'
-import { User, UserPlan, UserRole } from '@sogrow/services/domain/bom'
-import { Prisma } from '@prisma/client'
+import { TrialEndDate, User, UserPlan, UserRole } from '@sogrow/services/domain/bom'
+import { Account, Prisma } from '@prisma/client'
 
 @Injectable()
 export class AccountRepository {
   constructor(private readonly logger: PinoLogger, private readonly prisma: PrismaService) {
     this.logger.setContext(AccountRepository.name)
+  }
+
+  async getAccountByProviderAccountId(providerAccountId: string, provider: string): Promise<Account> {
+    return this.prisma.account.findUnique({
+      where: { provider_providerAccountId: { providerAccountId, provider } },
+    })
+  }
+
+  async createAccount(data: Prisma.AccountCreateInput): Promise<Account> {
+    return this.prisma.account.create({
+      data,
+    })
+  }
+
+  async updateAccount(accountId: string, provider: string, data: Prisma.AccountUpdateInput): Promise<Account> {
+    return this.prisma.account.update({
+      where: { provider_providerAccountId: { providerAccountId: accountId, provider } },
+      data,
+    })
   }
 
   async getUserByAccount(accountId: string, provider: string): Promise<User> {
@@ -34,6 +53,7 @@ export class AccountRepository {
     user.country = entity.country || ''
     user.timeZone = entity.timeZone || ''
     user.followersCount = entity.followersCount || 0
+    user.trialEndsAt = TrialEndDate.ofSafely(entity.trialEndsAt) || null
     return user
   }
 }

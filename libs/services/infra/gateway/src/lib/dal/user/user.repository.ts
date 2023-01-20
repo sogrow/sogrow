@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { PrismaService } from '../prisma/prisma.service'
-import { User as UserEntity } from '@prisma/client'
+import { Prisma, User as UserEntity } from '@prisma/client'
 import { User, UserPlan, UserRole } from '@sogrow/services/domain/bom'
 
 @Injectable()
@@ -10,9 +10,21 @@ export class UserRepository {
     this.logger.setContext(UserRepository.name)
   }
 
+  async getUserById(id: string): Promise<User> {
+    const userEntity = await this.prisma.user.findUnique({ where: { id } })
+    return this.toUser(userEntity)
+  }
+
   async createUser(user): Promise<User> {
-    this.logger.info({ user }, 'createUser')
     const userEntity = await this.prisma.user.create({ data: user })
+    return this.toUser(userEntity)
+  }
+
+  async updateUser(id: string, user: Prisma.UserUpdateInput): Promise<User> {
+    const userEntity = await this.prisma.user.update({
+      where: { id },
+      data: user,
+    })
     return this.toUser(userEntity)
   }
 
@@ -28,6 +40,24 @@ export class UserRepository {
     user.locale = userEntity.locale
     user.country = userEntity.country
     user.timeZone = userEntity.timeZone
+    user.followersCount = userEntity.followersCount
     return user
+  }
+
+  static toUserEntity(user: User): Prisma.UserUpdateInput {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user?.email || null,
+      image: user.image || null,
+      completedOnboarding: user.completedOnboarding,
+      userPlan: user.userPlan,
+      userRole: user.userRole,
+      locale: user.locale,
+      country: user.country,
+      timeZone: user.timeZone,
+      followersCount: user.followersCount,
+      trialEndsAt: user.trialEndsAt.toString(),
+    }
   }
 }
