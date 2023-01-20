@@ -4,4 +4,8 @@ export interface ServerlessEnvironment {
   profile: string
   domainName: string
   vpcName: string
+  apiGatewayThrottling: {
+    maxRequestsPerSecond: number
+    maxConcurrentRequests: number
+  }
 }
