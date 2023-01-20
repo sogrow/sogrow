@@ -40,6 +40,8 @@ const serverlessConfig: Partial<Serverless> = {
         JWT_EXPIRATION_TIME: '${env:JWT_EXPIRATION_TIME}',
         DATABASE_URL: '${env:DATABASE_URL}',
         TWITTER_BASE_URL: '${env:TWITTER_BASE_URL}',
+        IP_REGISTRY_BASE_URL: '${env:IP_REGISTRY_BASE_URL}',
+        IP_REGISTRY_API_KEY: '${env:IP_REGISTRY_API_KEY}',
       },
     },
   },

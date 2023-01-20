@@ -1,11 +1,10 @@
 import { BadGatewayException, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PinoLogger } from 'nestjs-pino'
-import { AxiosInstance } from 'axios'
+import { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { AxiosClientFactory } from '@sogrow/services/infra/instrumentation'
 import { UserResponseDto } from './dto/user-response.dto'
 import { User } from '@sogrow/services/domain/bom'
-import { reporter } from 'next/dist/trace/report'
 
 @Injectable()
 export class TwitterGatewayService {
@@ -20,6 +19,35 @@ export class TwitterGatewayService {
       baseURL: this.configService.get('TWITTER_BASE_URL'),
       validateStatus: (status: number) => status >= 200 && status < 300,
     })
+  }
+
+  async getUserFollowersCount(token: string): Promise<number> {
+    this.logger.info(`Preparing request to get User Followers Count.`)
+
+    const config: AxiosRequestConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        'user.fields': 'public_metrics',
+      },
+    }
+
+    return this.client
+      .get(`/users/me`, config)
+      .then((response) => {
+        this.logger.info(`Received response from Twitter API.`)
+        this.logger.info({ response: response?.data })
+        return response.data?.data?.public_metrics?.followers_count
+      })
+      .catch((error) => {
+        this.logger.error(
+          `Error retrieving User Followers Count. [err=${error}, status=${error.response?.status}, data=${JSON.stringify(
+            error.response?.data,
+          )}]`,
+        )
+        throw new BadGatewayException('GATEWAY_EXCEPTION_TWITTER_EXCEPTION')
+      })
   }
 
   async getUserInfo(token: string): Promise<User> {

@@ -1,19 +1,22 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Ip, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { AdapterUser } from 'next-auth/adapters'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
 import { CoreUtils } from '@sogrow/services/domain/util'
+import { UserService } from './user.service'
+import { User } from '@sogrow/services/domain/bom'
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly logger: PinoLogger, private readonly prisma: PrismaService) {
+  constructor(private readonly logger: PinoLogger, private readonly prisma: PrismaService, private readonly userService: UserService) {
     this.logger.setContext(UserController.name)
   }
 
   @Post('signup')
-  createUser(@Body() data: Omit<AdapterUser, 'id'>): Promise<AdapterUser> {
+  async createUser(@Body() data: Omit<AdapterUser, 'id'>, @Ip() ip: string): Promise<AdapterUser> {
     this.logger.info(`Received request to create user.`)
-    return this.prisma.user.create({ data })
+    const user = await this.userService.createUser(data, ip)
+    return this.toAdapterUser(user)
   }
 
   @Get()
@@ -39,5 +42,15 @@ export class UserController {
   deleteUser(@Param() id: string): Promise<AdapterUser> {
     this.logger.info(`Receive request to delete user [id=${id}]`)
     return this.prisma.user.delete({ where: { id } })
+  }
+
+  toAdapterUser(user: User): AdapterUser {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      emailVerified: null,
+    }
   }
 }

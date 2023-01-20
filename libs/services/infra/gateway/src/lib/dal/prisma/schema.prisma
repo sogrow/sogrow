@@ -24,7 +24,7 @@ model User {
   userRole            UserRole        @default(USER)
   locale              String?
   country             String?
-  timeZone            String?         @db.VarChar(10)
+  timeZone            String?         @db.Text
   followersCount      Int             @default(0) @db.Integer
   accounts            Account[]
   sessions            Session[]

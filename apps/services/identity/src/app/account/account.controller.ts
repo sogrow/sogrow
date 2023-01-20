@@ -16,20 +16,9 @@ export class AccountController {
   }
 
   @Post()
-  linkAccount(@Body() data: Prisma.AccountCreateInput): Prisma.Prisma__AccountClient<Account, never> {
+  linkAccount(@Body() data: Prisma.AccountCreateInput): Promise<Account> {
     this.logger.info(`Received request to link account.`)
-    return this.prisma.account.upsert({
-      where: {
-        provider_providerAccountId: {
-          providerAccountId: data.providerAccountId,
-          provider: data.provider,
-        },
-      },
-      update: {
-        ...data,
-      },
-      create: data,
-    })
+    return this.accountService.linkAccount(data)
   }
 
   @Get('user')
@@ -49,8 +38,8 @@ export class AccountController {
   ) {
     this.logger.info(`Received request to exchange token [provider=${query.provider}]`)
     this.assertProviderIsKnown(query.provider)
-    const token = this.assertBearerTokenIsPresent(bearer)
-    const access_token = await this.accountService.exchangeToken(query.providerAccountId, query.provider, token)
+    this.assertBearerTokenIsPresent(bearer)
+    const access_token = await this.accountService.exchangeToken(query.providerAccountId, query.provider, bearer)
     this.logger.info(`Access Token successfully exchanged`)
     return { access_token }
   }
@@ -82,6 +71,5 @@ export class AccountController {
       this.logger.warn(`Invalid or empty bearer token provided`)
       throw new UnauthorizedException(`UNAUTHORIZED`)
     }
-    return bearer.split(' ')[1]
   }
 }
