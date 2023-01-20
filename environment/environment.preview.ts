@@ -6,4 +6,8 @@ export const env: ServerlessEnvironment = {
   region: 'eu-central-1',
   domainName: 'api-preview.sogrow.cloud',
   vpcName: 'main',
+  apiGatewayThrottling: {
+    maxRequestsPerSecond: 100,
+    maxConcurrentRequests: 50,
+  },
 }

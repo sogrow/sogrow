@@ -33,6 +33,7 @@ export const baseServerlessConfig: Partial<Serverless> = {
     'serverless-offline',
     'serverless-domain-manager',
     'serverless-vpc-discovery',
+    'serverless-api-gateway-throttling',
   ],
   custom: {
     appName: 'sogrow',
@@ -66,6 +67,10 @@ export const baseServerlessConfig: Partial<Serverless> = {
           tagValues: ['security-group'],
         },
       ],
+    },
+    apiGatewayThrottling: {
+      maxRequestsPerSecond: env.apiGatewayThrottling.maxRequestsPerSecond,
+      maxConcurrentRequests: env.apiGatewayThrottling.maxConcurrentRequests,
     },
   },
   provider: {
