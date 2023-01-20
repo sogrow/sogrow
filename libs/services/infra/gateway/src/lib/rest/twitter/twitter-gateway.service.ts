@@ -37,7 +37,6 @@ export class TwitterGatewayService {
       .get(`/users/me`, config)
       .then((response) => {
         this.logger.info(`Received response from Twitter API.`)
-        this.logger.info({ response: response?.data })
         return response.data?.data?.public_metrics?.followers_count
       })
       .catch((error) => {
