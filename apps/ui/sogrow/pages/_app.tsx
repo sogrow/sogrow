@@ -5,19 +5,19 @@ import './styles.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import React from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import { SessionProvider, useSession } from 'next-auth/react'
-import { FeatureToggles } from '../config/featureToggle.type'
-import FeatureToggleContext from '../context/FeatureToggleContext'
+import { SessionProvider } from 'next-auth/react'
+import flagsmith from 'flagsmith/isomorphic'
+import { IState } from 'flagsmith/types'
+import { FlagsmithProvider } from 'flagsmith/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 type AppOwnProps = {
-  featureToggles: FeatureToggles
+  flagsmithState: IState
 }
 
-function CustomApp({ Component, pageProps: { session, ...pageProps }, featureToggles }: AppProps & AppOwnProps) {
+function CustomApp({ Component, pageProps: { session, ...pageProps }, flagsmithState }: AppProps & AppOwnProps) {
   const [queryClient] = React.useState(() => new QueryClient())
-  const [features] = React.useState(featureToggles)
   return (
     <>
       <Head>
@@ -53,14 +53,14 @@ function CustomApp({ Component, pageProps: { session, ...pageProps }, featureTog
         <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
       <main className={inter.className}>
-        <FeatureToggleContext.Provider value={features}>
+        <FlagsmithProvider flagsmith={flagsmith} serverState={flagsmithState}>
           <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>
               <Component {...pageProps} />
               <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
           </SessionProvider>
-        </FeatureToggleContext.Provider>
+        </FlagsmithProvider>
       </main>
     </>
   )
@@ -68,11 +68,11 @@ function CustomApp({ Component, pageProps: { session, ...pageProps }, featureTog
 
 CustomApp.getInitialProps = async (context: AppContext): Promise<AppOwnProps & AppInitialProps> => {
   const ctx = await App.getInitialProps(context)
-  const featureToggles: FeatureToggles = {
-    useSocialLogin: process.env?.SHOW_SOCIAL_LOGIN === 'true',
-  }
+  await flagsmith.init({
+    environmentID: process.env.FLAGSMITH_API_KEY,
+  })
 
-  return { ...ctx, featureToggles }
+  return { ...ctx, flagsmithState: flagsmith.getState() }
 }
 
 export default CustomApp
