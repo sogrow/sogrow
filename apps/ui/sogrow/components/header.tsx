@@ -2,14 +2,14 @@ import Logo from './logo'
 import { Button } from '@sogrow/ui/shared-webcomponents'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useFeatureToggle } from '../hooks/useFeatureToggle'
+import { useFlags } from 'flagsmith/react'
 
 export function Header() {
   const { data: session } = useSession()
-  const showSocialLogin = useFeatureToggle('useSocialLogin')
+  const flags = useFlags(['signup_enabled'])
 
   let socialLogin = null
-  if (showSocialLogin) {
+  if (flags.signup_enabled.enabled) {
     socialLogin = (
       <>
         {!session && (
