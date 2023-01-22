@@ -43,6 +43,8 @@
     "cls-hooked": "^4.2.2",
     "core-js": "3.23.3",
     "flagsmith": "^3.15.1",
+    "flowbite": "^1.6.2",
+    "flowbite-react": "^0.3.7",
     "formik": "2.2.9",
     "nestjs-pino": "^3.1.1",
     "next": "13.1.1",
