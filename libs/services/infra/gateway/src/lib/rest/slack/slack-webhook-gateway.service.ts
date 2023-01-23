@@ -22,13 +22,11 @@ export class SlackWebhookGatewayService {
     })
   }
 
-  async sendWebhookMessage({ message, config }: { message: SlackMessage; config: SlackWebhookConfig }): Promise<void> {
+  async send({ message, config }: { message: SlackMessage; config: SlackWebhookConfig }): Promise<void> {
     this.logger.info(`Preparing request to send Webhook Message.`)
     const uri = `/${config.workspace}/${config.channel}/${config.token}`
     return this.client
-      .post(uri, {
-        text: message,
-      })
+      .post(uri, message)
       .then((response) => {
         this.logger.info(`Received response from Slack API.`)
         return response.data

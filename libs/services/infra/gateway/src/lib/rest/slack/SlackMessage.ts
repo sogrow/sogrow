@@ -1,3 +1,6 @@
+import { SlackMessageBlock } from './SlackMessageBlock'
+
 export class SlackMessage {
-  message: string
+  text: string
+  blocks?: SlackMessageBlock[]
 }
