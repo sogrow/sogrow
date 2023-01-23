@@ -1,0 +1,5 @@
+export * from './SlackWebhookConfig'
+export * from './SlackMessage'
+export * from './SlackMessageBlock'
+export * from './slack-webhook-gateway.service'
+export * from './slack.module'

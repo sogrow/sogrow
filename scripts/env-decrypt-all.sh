@@ -12,7 +12,7 @@ NC='\033[0m'
 echo -e "[${BLUE}INFO${NC}] Decrypting sensitive environment files ⚙️"
 
 # Define an array of services to decrypt
-services=(analytics identity)
+services=(analytics identity support)
 
 # Iterate over the services and decrypt the environment files
 for service in "${services[@]}"

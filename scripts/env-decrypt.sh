@@ -15,7 +15,14 @@ environment=$2
 
 echo -e "[${BLUE}INFO${NC}] Decrypting $service in $environment environment ⚙️"
 
+
+if [ "$environment" == "local" ]; then
+file=".env"
+else
+file=".env.$environment"
+fi
+
 # Decrypt the encrypted environment files
-npx senv decrypt apps/services/$service/.env.$environment.encrypted > apps/services/$service/.env.$environment
+npx senv decrypt apps/services/$service/$file.encrypted > apps/services/$service/$file
 
 echo -e "[${BLUE}INFO${NC}] Done ✅"
