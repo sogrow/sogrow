@@ -14,7 +14,7 @@ export function Hero() {
           href="#join"
           className="w-full rounded-full border border-transparent bg-gray-700 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 sm:w-fit"
         >
-          Notify me
+          Join The Beta
         </a>
       </section>
       <section className="mt-24 flex flex-col items-center bg-gray-100 text-center sm:mt-24">
