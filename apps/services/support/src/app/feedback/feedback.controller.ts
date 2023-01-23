@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common'
+import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { RequestContext } from '@sogrow/services/web/context'
 import { CustomerSatisfactionScore, Feedback } from '@sogrow/services/domain/bom'
