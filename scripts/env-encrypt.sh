@@ -16,7 +16,13 @@ environment=$2
 # Print a message
 echo -e "[${BLUE}INFO${NC}] Encrypting $service in $environment environment ⚙️"
 
+if [ "$environment" == "local" ]; then
+file=".env"
+else
+file=".env.$environment"
+fi
+
 # Encrypt the decrypted environment files
-npx senv encrypt apps/services/$service/.env.$environment > apps/services/$service/.env.$environment.encrypted
+npx senv encrypt apps/services/$service/$file > apps/services/$service/$file.encrypted
 
 echo -e "[${BLUE}INFO${NC}] Done ✅"
