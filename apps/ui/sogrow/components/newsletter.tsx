@@ -18,7 +18,7 @@ export function Newsletter() {
   const getButtonText = () => {
     if (isLoading) return 'Loading'
     if (isError) return 'Try again'
-    return 'Notify me'
+    return 'Join'
   }
 
   const newsletterForm: FormikProps<NewsLetterFields> = useFormik<NewsLetterFields>({
@@ -41,9 +41,9 @@ export function Newsletter() {
 
   return (
     <section id="join" className="mx-auto my-16 flex max-w-md flex-col items-center px-4 text-center">
-      <h2 className="mb-6 max-w-xs text-4xl font-medium text-gray-900 sm:mb-8 md:text-5xl">Get notified when we release</h2>
+      <h2 className="mb-6 max-w-xs text-4xl font-medium text-gray-900 sm:mb-8 md:text-5xl">Join the beta</h2>
       <p className="sm:text-ml text-cs mb-8 text-base text-gray-500">
-        Be the first to know when we release—and start growing your audience for free.
+        Be the first to join the beta and get early access to Sogrow.
       </p>
       <form className="flex w-full flex-col justify-center sm:flex-row" onSubmit={newsletterForm.handleSubmit}>
         <div>
