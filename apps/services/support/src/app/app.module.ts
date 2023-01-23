@@ -5,11 +5,11 @@ import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from '@sogrow/services/web/auth'
 import { RequestContextMiddleware } from '@sogrow/services/web/context'
 import { DalModule } from '@sogrow/services/infra/gateway/dal'
-import { AppController } from './app.controller'
+import { FeedbackModule } from './feedback/feedback.module'
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), LoggerModule.forRoot(), AuthModule, DalModule],
-  controllers: [AppController],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), LoggerModule.forRoot(), AuthModule, DalModule, FeedbackModule],
+  controllers: [],
   providers: [],
 })
 export class AppModule {

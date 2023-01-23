@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   private extractUserContextFromJwtPayload(payload: any): UserContext {
     return {
       userId: payload.sub,
-      email: payload.email,
+      email: payload.email || null,
       userPlan: UserPlan[payload.userPlan],
       userRole: UserRole[payload.userRole],
       locale: payload.locale,
