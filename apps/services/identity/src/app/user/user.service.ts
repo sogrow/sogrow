@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { UserRepository } from '@sogrow/services/infra/gateway/dal'
 import { PinoLogger } from 'nestjs-pino'
 import { AdapterUser } from 'next-auth/adapters'
@@ -33,5 +33,17 @@ export class UserService {
     }
 
     return this.userRepository.createUser(user)
+  }
+
+  async getUserBy(id: string): Promise<User> {
+    this.logger.info(`Started process to get user by id [id=${id}]`)
+    try {
+      const user = await this.userRepository.getUserById(id)
+      this.logger.info(`User found [id=${id}]`)
+      return user
+    } catch (e) {
+      this.logger.warn(`User not found [id=${id}]`)
+      throw new NotFoundException('USER_NOT_FOUND')
+    }
   }
 }

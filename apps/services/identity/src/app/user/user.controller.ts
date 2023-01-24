@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Ip, NotFoundException, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Ip, NotFoundException, Param, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
 import { AdapterUser } from 'next-auth/adapters'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
 import { CoreUtils } from '@sogrow/services/domain/util'
 import { UserService } from './user.service'
 import { User } from '@sogrow/services/domain/bom'
+import { JwtAuthGuard } from '@sogrow/services/web/auth'
+import { RequestContext } from '@sogrow/services/web/context'
 
 @Controller('user')
 export class UserController {
@@ -30,6 +32,14 @@ export class UserController {
     }
     this.logger.warn(`User not found`)
     throw new NotFoundException('USER_NOT_FOUND')
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getMe() {
+    const userId = RequestContext.getUserId()
+    this.logger.info(`Received request to get current user [id=${userId}]`)
+    return this.userService.getUserBy(userId)
   }
 
   @Put(':id')
