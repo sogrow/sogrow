@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import { AdapterAccount, AdapterSession, AdapterUser } from 'next-auth/adapters'
+import { User } from '@sogrow/services/domain/bom'
 
 export default class SogrowClient {
   private client: AxiosInstance
@@ -18,6 +19,17 @@ export default class SogrowClient {
 
   getUser(id: string): Promise<AdapterUser> {
     return this.client.get(`/user`, { params: { id } }).then((response) => {
+      return response.data
+    })
+  }
+
+  getMe(accessToken): Promise<User> {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+    return this.client.get(`/user/me`, config).then((response) => {
       return response.data
     })
   }
