@@ -157,6 +157,14 @@ Table Feedback {
   createdAt DateTime [default: `now()`, not null]
 }
 
+Table UserSettings {
+  id String [pk]
+  userId String [not null]
+  slotPreference SlotPreference [not null, default: 'MANUAL']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
 Table Session {
   id String [pk]
   sessionToken String [unique, not null]
@@ -228,6 +236,11 @@ Enum UserPlan {
 Enum UserRole {
   ADMIN
   USER
+}
+
+Enum SlotPreference {
+  AUTO
+  MANUAL
 }
 
 Ref: Account.userId > User.id [delete: Cascade]

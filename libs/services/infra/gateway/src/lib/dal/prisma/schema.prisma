@@ -162,6 +162,14 @@ model Feedback {
   createdAt DateTime @default(now())
 }
 
+model UserSettings {
+  id             String         @id @default(cuid())
+  userId         String
+  slotPreference SlotPreference @default(MANUAL)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt
+}
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -231,4 +239,9 @@ enum UserPlan {
 enum UserRole {
   ADMIN
   USER
+}
+
+enum SlotPreference {
+  AUTO
+  MANUAL
 }
