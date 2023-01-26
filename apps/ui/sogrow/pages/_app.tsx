@@ -9,6 +9,7 @@ import { SessionProvider } from 'next-auth/react'
 import flagsmith from 'flagsmith/isomorphic'
 import { IState } from 'flagsmith/types'
 import { FlagsmithProvider } from 'flagsmith/react'
+import Layout from '../components/layout'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -52,16 +53,18 @@ function CustomApp({ Component, pageProps: { session, ...pageProps }, flagsmithS
         <meta name="google" content="notranslate" key="notranslate" />
         <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
-      <main className={inter.className}>
+      <div className={inter.className}>
         <FlagsmithProvider flagsmith={flagsmith} serverState={flagsmithState}>
           <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>
-              <Component {...pageProps} />
-              <ReactQueryDevtools initialIsOpen={false} />
+              <Layout>
+                <Component {...pageProps} />
+                <ReactQueryDevtools initialIsOpen={false} />
+              </Layout>
             </QueryClientProvider>
           </SessionProvider>
         </FlagsmithProvider>
-      </main>
+      </div>
     </>
   )
 }

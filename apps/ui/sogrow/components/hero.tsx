@@ -1,7 +1,7 @@
 export function Hero() {
   return (
     <>
-      <section className="mx-auto mt-24 flex max-w-7xl flex-col items-center px-4 text-center sm:mt-24">
+      <section className="mx-auto flex max-w-7xl flex-col items-center px-4 pt-24 text-center sm:pt-24">
         <p className="text-4xl font-bold text-gray-900 sm:text-5xl md:text-7xl">
           <span className="block">Never</span>
           <span className="mt-2 block sm:mt-4">Guess</span>
