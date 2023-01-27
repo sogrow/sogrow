@@ -9,9 +9,21 @@ import { SessionProvider } from 'next-auth/react'
 import flagsmith from 'flagsmith/isomorphic'
 import { IState } from 'flagsmith/types'
 import { FlagsmithProvider } from 'flagsmith/react'
+import localFont from '@next/font/local'
 import Layout from '../components/layout'
 
 const inter = Inter({ subsets: ['latin'] })
+
+const powerGrotesk = localFont({
+  src: [
+    {
+      path: '../public/fonts/power-grotesk/PowerGroteskTrial-Regular.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-grotesk',
+})
 
 type AppOwnProps = {
   flagsmithState: IState
@@ -53,7 +65,7 @@ function CustomApp({ Component, pageProps: { session, ...pageProps }, flagsmithS
         <meta name="google" content="notranslate" key="notranslate" />
         <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
-      <div className={inter.className}>
+      <div className={`${inter.className} ${powerGrotesk.variable}`}>
         <FlagsmithProvider flagsmith={flagsmith} serverState={flagsmithState}>
           <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>

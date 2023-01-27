@@ -10,7 +10,11 @@ module.exports = {
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        grotesk: ['power-grotesk', 'sans-serif'],
+      },
+    },
   },
   plugins: [require('@tailwindcss/forms'), require('flowbite/plugin'), require('tailwindcss-debug-screens')],
 }
