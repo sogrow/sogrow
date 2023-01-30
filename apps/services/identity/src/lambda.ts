@@ -6,16 +6,19 @@ import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda'
 import { AppModule } from './app/app.module'
 import { Logger } from 'nestjs-pino'
 import { PrismaService } from '@sogrow/services/infra/gateway/dal'
+import helmet from 'helmet'
 
 let server: Handler
 
 async function bootstrap(): Promise<Handler> {
   const nestApp = await NestFactory.create(AppModule)
   nestApp.useGlobalPipes(new ValidationPipe())
+  nestApp.enableCors()
   await nestApp.init()
   const prismaService: PrismaService = nestApp.get(PrismaService)
   await prismaService.enableShutdownHooks(nestApp)
   nestApp.useLogger(nestApp.get(Logger))
+  nestApp.use(helmet())
   const app = nestApp.getHttpAdapter().getInstance()
   return serverlessExpress({ app })
 }

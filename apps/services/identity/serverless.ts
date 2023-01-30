@@ -26,12 +26,14 @@ const serverlessConfig: Partial<Serverless> = {
           http: {
             method: 'ANY',
             path: '/',
+            cors: true,
           },
         },
         {
           http: {
             method: 'ANY',
             path: '{proxy+}',
+            cors: true,
           },
         },
       ],

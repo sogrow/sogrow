@@ -46,6 +46,7 @@
     "flowbite": "^1.6.2",
     "flowbite-react": "^0.3.7",
     "formik": "2.2.9",
+    "helmet": "^6.0.1",
     "i18next": "^22.4.9",
     "nestjs-pino": "^3.1.1",
     "next": "13.1.1",
