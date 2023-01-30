@@ -32,6 +32,7 @@ model User {
   socialAccounts      SocialAccount[]
   slots               Slot[]
   posts               Post[]
+  userSettings        UserSettings?
   updatedAt           DateTime        @default(now()) @updatedAt
   createdAt           DateTime        @default(now())
 }
@@ -164,7 +165,8 @@ model Feedback {
 
 model UserSettings {
   id             String         @id @default(cuid())
-  userId         String
+  userId         String         @unique
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   slotPreference SlotPreference @default(MANUAL)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @default(now()) @updatedAt

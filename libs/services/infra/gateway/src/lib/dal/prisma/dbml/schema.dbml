@@ -22,6 +22,7 @@ Table User {
   socialAccounts SocialAccount [not null]
   slots Slot [not null]
   posts Post [not null]
+  userSettings UserSettings
   updatedAt DateTime [default: `now()`, not null]
   createdAt DateTime [default: `now()`, not null]
 }
@@ -159,7 +160,8 @@ Table Feedback {
 
 Table UserSettings {
   id String [pk]
-  userId String [not null]
+  userId String [unique, not null]
+  user User [not null]
   slotPreference SlotPreference [not null, default: 'MANUAL']
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [default: `now()`, not null]
@@ -264,5 +266,7 @@ Ref: Schedule.postId > Post.id [delete: Cascade]
 Ref: Schedule.socialPostId > SocialPost.id [delete: Cascade]
 
 Ref: Feedback.userId > User.id
+
+Ref: UserSettings.userId - User.id [delete: Cascade]
 
 Ref: Session.userId > User.id [delete: Cascade]

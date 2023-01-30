@@ -1,5 +1,6 @@
 export * from './prisma/prisma.service'
 export * from './account/account.repository'
 export * from './user/user.repository'
+export * from './user-settings/user-settings.repository'
 export * from './feedback/feedback.repository'
 export * from './dal.module'
