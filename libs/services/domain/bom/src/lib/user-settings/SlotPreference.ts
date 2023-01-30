@@ -1,4 +1,4 @@
 export enum SlotPreference {
-  AUTO = 'TRIAL',
-  MANUAL = 'MANUAL',
+  AUTO = 'auto',
+  MANUAL = 'manual',
 }
