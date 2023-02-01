@@ -1,8 +1,13 @@
 {
-  "slot_preference_headline": "Select post mode",
+  "getting_started": "Getting Started",
+  "setup_slot_preference_headline": "Select post mode",
   "slot_preference_auto_title": "Auto-pilot",
   "slot_preference_auto_description": "Provide your preferences, we take care of the rest.",
   "slot_preference_manual_title": "Manually",
   "slot_preference_manual_description": "Specify manual slots step by step.",
-  "slot_preference_button_next_label": "Next"
+  "setup_slots_button_next_label": "Next",
+  "setup_slots_button_previous_label": "Back",
+  "setup_slots_button_finish_label": "Done",
+  "setup_slots_headline_auto": "Set up auto-pilot slots",
+  "setup_slots_headline_manual": "Set up manual slots"
 }
