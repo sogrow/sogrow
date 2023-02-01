@@ -67,7 +67,8 @@
     "rxjs": "^7.0.0",
     "serverless-vpc-discovery": "^4.0.2",
     "tslib": "^2.3.0",
-    "yup": "0.32.11"
+    "yup": "0.32.11",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@nestjs/schematics": "^9.0.0",
