@@ -35,5 +35,6 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('flowbite/plugin'),
     require('tailwindcss-debug-screens'),
+    require('tailwind-scrollbar-hide'),
   ],
 }

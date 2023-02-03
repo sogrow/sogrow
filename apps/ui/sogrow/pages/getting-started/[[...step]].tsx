@@ -7,6 +7,7 @@ import { SlotPreference } from '@sogrow/services/domain/bom'
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useGetUserSettings } from '../../api/user-settings'
+import ManualSlots from '../../components/getting-started/manualSlots'
 
 const INITIAL_STEP = 'slot-preference'
 const steps = ['slot-preference', 'setup-auto-slots', 'setup-manually-slots'] as const
@@ -98,16 +99,16 @@ export function OnboardingPage() {
         <h1 className="font-grotesk pb-6 text-xl">{headers[currentStepIndex]?.title || 'Undefined Title'}</h1>
         {currentStep === 'slot-preference' && <SlotPreferences onSlotPreferenceChange={onSlotPreferenceChange} />}
         {currentStep === 'setup-auto-slots' && <div>Auto Slots</div>}
-        {currentStep === 'setup-manually-slots' && <div>Manual Slots</div>}
-        <div className="flex items-center justify-between">
+        {currentStep === 'setup-manually-slots' && <ManualSlots />}
+        <div className="mt-8 flex items-center justify-between">
           <span className="pl-4 text-sm text-zinc-600">{getCurrentStepIndex()}/2</span>
           <div className="flex">
             {headers[currentStepIndex]?.buttonPreviousLabel && (
-              <Button className="mr-4" color="gray" pill onClick={onPrevious}>
+              <Button className="mr-4" color="secondary" pill onClick={onPrevious}>
                 {headers[currentStepIndex]?.buttonPreviousLabel}
               </Button>
             )}
-            <Button color="purple" pill onClick={onNext}>
+            <Button color="primary" pill onClick={onNext}>
               {headers[currentStepIndex]?.buttonNextLabel}
             </Button>
           </div>

@@ -39,7 +39,7 @@ export function SlotPreferences({ onSlotPreferenceChange }: SlotPreferencesProps
   }
 
   return (
-    <ul className="mb-8 grid w-full gap-2 lg:grid-cols-2">
+    <ul className="grid w-full gap-2 lg:grid-cols-2">
       {slots.map((slot) => (
         <li key={slot.id}>
           <input
