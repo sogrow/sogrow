@@ -8,6 +8,9 @@ import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useGetUserSettings } from '../../api/user-settings'
 import ManualSlots from '../../components/getting-started/manualSlots'
+import AutoSlots from '../../components/getting-started/autoSlots'
+import { GetServerSidePropsContext } from 'next'
+import { getSession } from 'next-auth/react'
 
 const INITIAL_STEP = 'slot-preference'
 const steps = ['slot-preference', 'setup-auto-slots', 'setup-manually-slots'] as const
@@ -27,7 +30,7 @@ const stepRouteSchema = z.object({
 export function OnboardingPage() {
   const router = useRouter()
   const { t } = useTranslation('common')
-  const { data: userSettings } = useGetUserSettings()
+  const { data: userSettings, isLoading } = useGetUserSettings()
   const [slotPreference, setSlotPreference] = useState<SlotPreference>(null)
 
   const result = stepRouteSchema.safeParse(router.query)
@@ -98,7 +101,7 @@ export function OnboardingPage() {
       <section className="py-8 md:pt-40 md:pb-4">
         <h1 className="font-grotesk pb-6 text-xl">{headers[currentStepIndex]?.title || 'Undefined Title'}</h1>
         {currentStep === 'slot-preference' && <SlotPreferences onSlotPreferenceChange={onSlotPreferenceChange} />}
-        {currentStep === 'setup-auto-slots' && <div>Auto Slots</div>}
+        {currentStep === 'setup-auto-slots' && <AutoSlots />}
         {currentStep === 'setup-manually-slots' && <ManualSlots />}
         <div className="mt-8 flex items-center justify-between">
           <span className="pl-4 text-sm text-zinc-600">{getCurrentStepIndex()}/2</span>
@@ -108,7 +111,7 @@ export function OnboardingPage() {
                 {headers[currentStepIndex]?.buttonPreviousLabel}
               </Button>
             )}
-            <Button color="primary" pill onClick={onNext}>
+            <Button color="primary" pill onClick={onNext} disabled={isLoading}>
               {headers[currentStepIndex]?.buttonNextLabel}
             </Button>
           </div>
@@ -116,6 +119,16 @@ export function OnboardingPage() {
       </section>
     </div>
   )
+}
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const session = await getSession(context)
+
+  if (!session?.user?.id) {
+    return { redirect: { permanent: false, destination: '/api/auth/signin' } }
+  }
+
+  return { props: { session } }
 }
 
 export default OnboardingPage
