@@ -6,7 +6,7 @@ const plugin = require('tailwindcss/plugin')
 module.exports = {
   presets: [require('../../../tailwind-workspace-preset.js')],
   content: [
-    join(__dirname, '{src,pages,components}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
+    join(__dirname, '{src,pages,components,theme}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
     ...createGlobPatternsForDependencies(__dirname),
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
   ],

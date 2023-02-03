@@ -11,6 +11,8 @@ import { IState } from 'flagsmith/types'
 import { FlagsmithProvider } from 'flagsmith/react'
 import localFont from '@next/font/local'
 import Layout from '../components/layout'
+import { Flowbite } from 'flowbite-react'
+import { customFlowbiteTheme } from '../theme/customFlowbiteTheme'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -66,16 +68,18 @@ function CustomApp({ Component, pageProps: { session, ...pageProps }, flagsmithS
         <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
       <div className={`${inter.className} ${powerGrotesk.variable}`}>
-        <FlagsmithProvider flagsmith={flagsmith} serverState={flagsmithState}>
-          <SessionProvider session={session}>
-            <QueryClientProvider client={queryClient}>
-              <Layout>
-                <Component {...pageProps} />
-                <ReactQueryDevtools initialIsOpen={false} />
-              </Layout>
-            </QueryClientProvider>
-          </SessionProvider>
-        </FlagsmithProvider>
+        <Flowbite theme={{ theme: customFlowbiteTheme }}>
+          <FlagsmithProvider flagsmith={flagsmith} serverState={flagsmithState}>
+            <SessionProvider session={session}>
+              <QueryClientProvider client={queryClient}>
+                <Layout>
+                  <Component {...pageProps} />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                </Layout>
+              </QueryClientProvider>
+            </SessionProvider>
+          </FlagsmithProvider>
+        </Flowbite>
       </div>
     </>
   )
