@@ -151,38 +151,41 @@ export function ManualSlots() {
   }
 
   return (
-    <div className="grid grid-cols-1 divide-y">
-      {Object.entries(slotSettings).map(([key, value]) => (
-        <div key={key}>
-          <div className="flex items-center justify-between">
-            <div className="py-4 text-sm text-gray-900">{t(value.day)}</div>
-            <Button pill color="lightViolet" onClick={() => addSlot(value.day)} disabled={value.slots?.length === MAX_POSTS_PER_DAY}>
-              <PlusIcon className="h-4 w-4" aria-hidden="true" />
-            </Button>
+    <>
+      <h1 className="font-grotesk flex pb-6 text-xl">{t('setup_slots_headline_manual')}</h1>
+      <div className="grid grid-cols-1 divide-y">
+        {Object.entries(slotSettings).map(([key, value]) => (
+          <div key={key}>
+            <div className="flex items-center justify-between">
+              <div className="py-4 text-sm text-gray-900">{t(value.day)}</div>
+              <Button pill color="lightViolet" onClick={() => addSlot(value.day)} disabled={value.slots?.length === MAX_POSTS_PER_DAY}>
+                <PlusIcon className="h-4 w-4" aria-hidden="true" />
+              </Button>
+            </div>
+            <div className="scrollbar-hide flex space-x-2 overflow-x-auto">
+              {value.slots?.map((slot) => (
+                <div key={slot.id} className="pb-2">
+                  <TextInput
+                    className="w-fit flex-row-reverse"
+                    id={slot.id}
+                    type="time"
+                    value={slot.publishTime}
+                    required
+                    onChange={(e) => changeSlot(value.day, slot.id, e.target.value)}
+                    onBlur={() => sortSlots(value.day)}
+                    addon={
+                      <button className="min-h-full w-full px-3" onClick={() => removeSlot(value.day, slot.id)}>
+                        <TrashIcon className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    }
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="scrollbar-hide flex space-x-2 overflow-x-auto">
-            {value.slots?.map((slot) => (
-              <div key={slot.id} className="pb-2">
-                <TextInput
-                  className="w-fit flex-row-reverse"
-                  id={slot.id}
-                  type="time"
-                  value={slot.publishTime}
-                  required
-                  onChange={(e) => changeSlot(value.day, slot.id, e.target.value)}
-                  onBlur={() => sortSlots(value.day)}
-                  addon={
-                    <button className="min-h-full w-full px-3" onClick={() => removeSlot(value.day, slot.id)}>
-                      <TrashIcon className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  }
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   )
 }
 

@@ -99,7 +99,6 @@ export function OnboardingPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="py-8 md:pt-40 md:pb-4">
-        <h1 className="font-grotesk pb-6 text-xl">{headers[currentStepIndex]?.title || 'Undefined Title'}</h1>
         {currentStep === 'slot-preference' && <SlotPreferences onSlotPreferenceChange={onSlotPreferenceChange} />}
         {currentStep === 'setup-auto-slots' && <AutoSlots />}
         {currentStep === 'setup-manually-slots' && <ManualSlots />}

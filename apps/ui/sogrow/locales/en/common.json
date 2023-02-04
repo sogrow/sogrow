@@ -9,6 +9,8 @@
   "setup_slots_button_previous_label": "Back",
   "setup_slots_button_finish_label": "Done",
   "setup_slots_headline_auto": "Set up auto-pilot slots",
+  "setup_slots_auto_help_title": "What's auto-pilot?",
+  "setup_slots_auto_help_description": "Auto-pilot is the perfect companion for your start with social media. It takes care of your scheduling and automatically spreads the number of posts across the preferred days.",
   "setup_slots_auto_writing_cadence": "How often do you post?",
   "setup_slots_auto_writing_basis": "On what basis do you post?",
   "setup_slots_auto_writing_days": "At which days would you like to post?",
