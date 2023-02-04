@@ -10,6 +10,10 @@
   "setup_slots_button_finish_label": "Done",
   "setup_slots_headline_auto": "Set up auto-pilot slots",
   "setup_slots_auto_writing_cadence": "How often do you post?",
+  "setup_slots_auto_writing_basis": "On what basis do you post?",
+  "setup_slots_auto_writing_days": "At which days would you like to post?",
+  "setup_slots_auto_writing_basis_daily_title": "Daily",
+  "setup_slots_auto_writing_basis_weekly_title": "Weekly",
   "setup_slots_headline_manual": "Set up manual slots",
   "monday": "Monday",
   "tuesday": "Tuesday",
@@ -17,5 +21,12 @@
   "thursday": "Thursday",
   "friday": "Friday",
   "saturday": "Saturday",
-  "sunday": "Sunday"
+  "sunday": "Sunday",
+  "mo": "Mo",
+  "tue": "Tue",
+  "wed": "Wed",
+  "thur": "Thur",
+  "fr": "Fr",
+  "sat": "Sat",
+  "sun": "Sun"
 }

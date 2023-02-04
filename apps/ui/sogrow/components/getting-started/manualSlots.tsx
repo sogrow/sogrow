@@ -165,7 +165,6 @@ export function ManualSlots() {
               <div key={slot.id} className="pb-2">
                 <TextInput
                   className="w-fit flex-row-reverse"
-                  key={slot.id}
                   id={slot.id}
                   type="time"
                   value={slot.publishTime}
