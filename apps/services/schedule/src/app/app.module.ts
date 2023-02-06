@@ -4,12 +4,10 @@ import { ConfigModule } from '@nestjs/config'
 import { LoggerModule } from '@sogrow/services/infra/observation'
 import { AuthModule } from '@sogrow/services/web/auth'
 import { RequestContextMiddleware } from '@sogrow/services/web/context'
-import { DalModule } from '@sogrow/services/infra/gateway/dal'
+import { SlotModule } from './slot/slot.module'
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), LoggerModule.forRoot(), AuthModule, DalModule],
-  controllers: [],
-  providers: [],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), LoggerModule.forRoot(), SlotModule, AuthModule],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

@@ -1,12 +1,11 @@
-import { WeekDay } from './WeekDay'
-import { TimeOfDay } from './TimeOfDay'
+import { Weekday } from './WeekDay'
 import { SlotType } from './SlotType'
 
 export class Slot {
   id?: string
+  userId: string
   type: SlotType
-  day: WeekDay
-  timeOfDay: TimeOfDay
+  day: Weekday
   time?: string
   relativeTimeStart?: string
   relativeTimeEnd?: string

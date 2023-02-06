@@ -74,7 +74,6 @@ Table Slot {
   time String
   relativeTimeStart String
   relativeTimeEnd String
-  timeOfDay TimeOfDay
   type SlotType [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [default: `now()`, not null]
@@ -194,13 +193,6 @@ Enum Weekday {
   FRIDAY
   SATURDAY
   SUNDAY
-}
-
-Enum TimeOfDay {
-  MORNING
-  AFTERNOON
-  EVENING
-  NIGHT
 }
 
 Enum SlotType {
