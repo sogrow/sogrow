@@ -12,7 +12,7 @@ NC='\033[0m'
 echo -e "[${BLUE}INFO${NC}] Encrypting sensitive environment files ⚙️"
 
 # Define an array of services to encrypt
-services=(analytics identity support)
+services=(analytics identity support schedule)
 
 # Iterate over the services and encrypt the environment files
 for service in "${services[@]}"
