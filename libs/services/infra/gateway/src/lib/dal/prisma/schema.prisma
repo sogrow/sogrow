@@ -78,9 +78,9 @@ model Slot {
   userId            String
   user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   day               Weekday
-  time              DateTime?  @db.Time
-  relativeTimeStart DateTime?  @db.Time
-  relativeTimeEnd   DateTime?  @db.Time
+  time              String?    @db.Char(5)
+  relativeTimeStart String?    @db.Char(5)
+  relativeTimeEnd   String?    @db.Char(5)
   timeOfDay         TimeOfDay?
   type              SlotType
   createdAt         DateTime   @default(now())

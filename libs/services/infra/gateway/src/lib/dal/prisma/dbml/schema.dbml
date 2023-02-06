@@ -71,9 +71,9 @@ Table Slot {
   userId String [not null]
   user User [not null]
   day Weekday [not null]
-  time DateTime
-  relativeTimeStart DateTime
-  relativeTimeEnd DateTime
+  time String
+  relativeTimeStart String
+  relativeTimeEnd String
   timeOfDay TimeOfDay
   type SlotType [not null]
   createdAt DateTime [default: `now()`, not null]
