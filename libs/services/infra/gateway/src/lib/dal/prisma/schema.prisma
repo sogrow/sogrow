@@ -82,6 +82,7 @@ model Slot {
   relativeTimeStart DateTime?  @db.Time
   relativeTimeEnd   DateTime?  @db.Time
   timeOfDay         TimeOfDay?
+  type              SlotType
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @default(now()) @updatedAt
 }
@@ -203,6 +204,11 @@ enum TimeOfDay {
   AFTERNOON
   EVENING
   NIGHT
+}
+
+enum SlotType {
+  FIXED
+  RELATIVE
 }
 
 enum PostStatus {

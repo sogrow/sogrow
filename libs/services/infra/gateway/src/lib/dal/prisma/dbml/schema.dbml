@@ -75,6 +75,7 @@ Table Slot {
   relativeTimeStart DateTime
   relativeTimeEnd DateTime
   timeOfDay TimeOfDay
+  type SlotType [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [default: `now()`, not null]
 }
@@ -200,6 +201,11 @@ Enum TimeOfDay {
   AFTERNOON
   EVENING
   NIGHT
+}
+
+Enum SlotType {
+  FIXED
+  RELATIVE
 }
 
 Enum PostStatus {
