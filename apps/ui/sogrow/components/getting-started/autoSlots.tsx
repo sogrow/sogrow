@@ -17,7 +17,7 @@ const days = {
 
 export function AutoSlots() {
   const { t } = useTranslation('common')
-  const [postFrequency, setPostFrequency] = useState(0)
+  const [postFrequency, setPostFrequency] = useState(1)
   const [postBasis, setPostBasis] = useState()
   const [postDays, setPostDays] = useState([])
   const [showSlideOver, setShowSlideOver] = useState(false)
@@ -34,7 +34,13 @@ export function AutoSlots() {
   ]
 
   const changePostFrequency = (frequency) => {
+    frequency = parseInt(frequency)
+    if (frequency < 0 || frequency > 6) {
+      return
+    }
+
     setPostFrequency(frequency)
+
     if (postBasis === 'WEEKLY') {
       setPostDays(postDays.slice(0, frequency))
     }
@@ -85,7 +91,7 @@ export function AutoSlots() {
   }
 
   return (
-    <>
+    <div className="flex h-full flex-col justify-center">
       <h1 className="font-grotesk flex pb-6 text-xl">
         {t('setup_slots_headline_auto')}
         <InformationCircleIcon className="ml-2 h-6 w-6 cursor-pointer text-violet-600" onClick={() => setShowSlideOver(true)} />
@@ -97,6 +103,7 @@ export function AutoSlots() {
             className="w-full"
             type="number"
             value={postFrequency}
+            placeholder="1-6"
             required
             onChange={(e) => changePostFrequency(e.target.value)}
             min={0}
@@ -163,7 +170,7 @@ export function AutoSlots() {
           <p className="text-sm text-gray-500">{t('setup_slots_auto_help_description')}</p>
         </SlideOver>
       </div>
-    </>
+    </div>
   )
 }
 

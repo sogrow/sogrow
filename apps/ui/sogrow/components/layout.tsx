@@ -8,10 +8,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   })
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col">
       <Header />
       <main className="flex-1 bg-zinc-50">
-        <div className="container mx-auto px-4">{children}</div>
+        <div className="container mx-auto h-full px-4">{children}</div>
       </main>
       <Footer />
     </div>

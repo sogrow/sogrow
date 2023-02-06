@@ -151,7 +151,7 @@ export function ManualSlots() {
   }
 
   return (
-    <>
+    <div className="flex h-full flex-col md:mt-40">
       <h1 className="font-grotesk flex pb-6 text-xl">{t('setup_slots_headline_manual')}</h1>
       <div className="grid grid-cols-1 divide-y">
         {Object.entries(slotSettings).map(([key, value]) => (
@@ -185,7 +185,7 @@ export function ManualSlots() {
           </div>
         ))}
       </div>
-    </>
+    </div>
   )
 }
 

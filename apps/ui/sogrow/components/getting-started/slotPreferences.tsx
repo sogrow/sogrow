@@ -39,7 +39,7 @@ export function SlotPreferences({ onSlotPreferenceChange }: SlotPreferencesProps
   }
 
   return (
-    <>
+    <div className="flex h-full flex-col justify-center">
       <h1 className="font-grotesk flex pb-6 text-xl">{t('setup_slot_preference_headline')}</h1>
       <ul className="grid w-full gap-2 lg:grid-cols-2">
         {slots.map((slot) => (
@@ -66,7 +66,7 @@ export function SlotPreferences({ onSlotPreferenceChange }: SlotPreferencesProps
           </li>
         ))}
       </ul>
-    </>
+    </div>
   )
 }
 

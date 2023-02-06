@@ -21,6 +21,17 @@
 
 html {
   scroll-behavior: smooth;
+  @apply h-full;
+}
+
+body {
+  @apply h-full;
+}
+div#__next {
+  @apply h-full;
+}
+main {
+  @apply h-full;
 }
 
 @font-face {
