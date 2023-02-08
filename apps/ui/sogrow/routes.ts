@@ -1,6 +1,11 @@
 const baseURL = 'https://api-preview.sogrow.cloud'
 
 export const apiRoutes = {
-  getUserSettings: baseURL + '/identity/user-settings',
-  updateUserSettings: baseURL + '/identity/user-settings',
+  userSettings: {
+    get: baseURL + '/identity/user-settings',
+    update: baseURL + '/identity/user-settings',
+  },
+  slot: {
+    setup: baseURL + '/schedule/slots/setup',
+  },
 }

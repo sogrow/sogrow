@@ -3,15 +3,20 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import SlotPreferences from '../../components/getting-started/slotPreferences'
 import { Button } from 'flowbite-react'
-import { SlotPreference } from '@sogrow/services/domain/bom'
+import { Slot, SlotPreference, SlotType, Weekday } from '@sogrow/services/domain/bom'
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useGetUserSettings } from '../../api/user-settings'
-import ManualSlots from '../../components/getting-started/manualSlots'
-import AutoSlots from '../../components/getting-started/autoSlots'
+import ManualSlots, { ManualSlotSettings } from '../../components/getting-started/manualSlots'
+import AutoSlots, { AutoSlotSettings } from '../../components/getting-started/autoSlots'
 import { GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
 import SetupComplete from '../../components/getting-started/setupComplete'
+import { useSetupSlots } from '../../api/slots'
+import { inferSSRProps } from '../../types/inferSSRProps'
+import { randomTimeRange } from '../../utils/timeUtils'
+
+type OnboardingPageProps = inferSSRProps<typeof getServerSideProps>
 
 const INITIAL_STEP = 'slot-preference'
 const steps = ['slot-preference', 'setup-auto-slots', 'setup-manually-slots', 'setup-complete'] as const
@@ -28,11 +33,15 @@ const stepRouteSchema = z.object({
   step: z.array(z.enum(steps)).default([INITIAL_STEP]),
 })
 
-export function OnboardingPage() {
+export function OnboardingPage({ user }: OnboardingPageProps) {
   const router = useRouter()
   const { t } = useTranslation('common')
   const { data: userSettings, isLoading } = useGetUserSettings()
   const [slotPreference, setSlotPreference] = useState<SlotPreference>(null)
+  const [autoSlots, setAutoSlots] = useState<AutoSlotSettings>()
+  const [manualSlots, setManualSlots] = useState<ManualSlotSettings>()
+
+  const mutateSetupSlots = useSetupSlots()
 
   const result = stepRouteSchema.safeParse(router.query)
   const currentStep = result.success ? result.data.step[0] : INITIAL_STEP
@@ -64,6 +73,14 @@ export function OnboardingPage() {
     }
   }, [userSettings])
 
+  const onManualSlotsChange = (manualSlots: ManualSlotSettings) => {
+    setManualSlots(manualSlots)
+  }
+
+  const onAutoSlotsChange = (autoSlots: AutoSlotSettings) => {
+    setAutoSlots(autoSlots)
+  }
+
   const goToIndex = (index: number) => {
     const newStep = steps[index]
     router.push(
@@ -76,7 +93,7 @@ export function OnboardingPage() {
 
   const stepSequenceChange = {
     'slot-preference': {
-      next: () => {
+      next: async () => {
         if (slotPreference === SlotPreference.AUTO) {
           goToIndex(1)
         } else if (slotPreference === SlotPreference.MANUAL) {
@@ -85,12 +102,16 @@ export function OnboardingPage() {
       },
     },
     'setup-auto-slots': {
-      next: () => {
+      next: async () => {
+        const slots = unifyAutoSlots(autoSlots, user.id)
+        await mutateSetupSlots.mutateAsync({ slots })
         goToIndex(3)
       },
     },
     'setup-manually-slots': {
-      next: () => {
+      next: async () => {
+        const slots = unifyManualSlots(manualSlots, user.id)
+        await mutateSetupSlots.mutateAsync({ slots })
         goToIndex(3)
       },
     },
@@ -104,8 +125,8 @@ export function OnboardingPage() {
     goToIndex(0)
   }
 
-  const onNext = () => {
-    stepSequenceChange[currentStep]?.next()
+  const onNext = async () => {
+    await stepSequenceChange[currentStep]?.next()
   }
 
   const getCurrentStepIndex = () => {
@@ -122,8 +143,8 @@ export function OnboardingPage() {
       </Head>
       <section className="flex h-full flex-col py-8">
         {currentStep === 'slot-preference' && <SlotPreferences onSlotPreferenceChange={onSlotPreferenceChange} />}
-        {currentStep === 'setup-auto-slots' && <AutoSlots />}
-        {currentStep === 'setup-manually-slots' && <ManualSlots />}
+        {currentStep === 'setup-auto-slots' && <AutoSlots onSlotChange={onAutoSlotsChange} />}
+        {currentStep === 'setup-manually-slots' && <ManualSlots onSlotsChange={onManualSlotsChange} />}
         {currentStep === 'setup-complete' && <SetupComplete />}
         {currentStep !== 'setup-complete' && (
           <div className="mt-8 flex items-center justify-between">
@@ -145,6 +166,55 @@ export function OnboardingPage() {
   )
 }
 
+function unifyManualSlots(manualSlots: ManualSlotSettings, userId: string): Slot[] {
+  const slots: Slot[] = []
+  Object.keys(manualSlots).forEach((key) => {
+    if (manualSlots[key]) {
+      slots.push(
+        ...manualSlots[key]['slots'].map((slot) => ({
+          type: SlotType.FIXED,
+          userId,
+          day: key.toUpperCase(),
+          time: slot.publishTime,
+        })),
+      )
+    }
+  })
+  return slots
+}
+
+function unifyAutoSlots(autoSlots: AutoSlotSettings, userId: string): Slot[] {
+  const slots: Slot[] = []
+  if (autoSlots?.postBasis === 'DAILY') {
+    autoSlots.postingDays.forEach((day) => {
+      for (let i = 1; i <= autoSlots.postFrequency; i++) {
+        const timeRange = randomTimeRange[autoSlots.postFrequency][i - 1]
+        slots.push({
+          type: SlotType.RELATIVE,
+          userId,
+          day: Weekday[day.toUpperCase()],
+          relativeTimeStart: timeRange.startTime,
+          relativeTimeEnd: timeRange.endTime,
+        })
+      }
+    })
+    return slots
+  }
+  for (let i = 1; i <= autoSlots.postFrequency; i++) {
+    const day = autoSlots.postingDays[i - 1]
+    const timeRange = randomTimeRange[1][0]
+    slots.push({
+      type: SlotType.RELATIVE,
+      userId: userId,
+      day: Weekday[day.toUpperCase()],
+      relativeTimeStart: timeRange.startTime,
+      relativeTimeEnd: timeRange.endTime,
+    })
+  }
+
+  return slots
+}
+
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const session = await getSession(context)
 
@@ -152,7 +222,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     return { redirect: { permanent: false, destination: '/api/auth/signin' } }
   }
 
-  return { props: { session } }
+  return { props: { user: session.user } }
 }
 
 export default OnboardingPage

@@ -15,12 +15,25 @@ const days = {
   sunday: 'sun',
 }
 
-export function AutoSlots() {
+export type AutoSlotSettings = {
+  postFrequency?: number
+  postBasis?: 'DAILY' | 'WEEKLY'
+  postingDays?: string[]
+}
+
+export type AutoSlotProps = {
+  onSlotChange: (slot: AutoSlotSettings) => void
+}
+
+export function AutoSlots({ onSlotChange }: AutoSlotProps) {
   const { t } = useTranslation('common')
-  const [postFrequency, setPostFrequency] = useState(1)
-  const [postBasis, setPostBasis] = useState()
-  const [postDays, setPostDays] = useState([])
   const [showSlideOver, setShowSlideOver] = useState(false)
+  const [autoSlotSettings, setAutoSlotSettings] = useState<AutoSlotSettings>({
+    postFrequency: 0,
+    postBasis: null,
+    postingDays: [],
+  })
+  const { postFrequency, postBasis, postingDays } = autoSlotSettings
 
   const postingBasis: PostBasis[] = [
     {
@@ -39,54 +52,64 @@ export function AutoSlots() {
       return
     }
 
-    setPostFrequency(frequency)
+    const newAutoSlotSettings = { ...autoSlotSettings }
+    newAutoSlotSettings.postFrequency = frequency
 
-    if (postBasis === 'WEEKLY') {
-      setPostDays(postDays.slice(0, frequency))
+    if (newAutoSlotSettings.postBasis === 'WEEKLY') {
+      newAutoSlotSettings.postingDays = postingDays.slice(0, frequency)
     }
     if (frequency === 0) {
-      setPostBasis(null)
+      newAutoSlotSettings.postBasis = null
     }
+
+    setAutoSlotSettings(newAutoSlotSettings)
+    onSlotChange(newAutoSlotSettings)
   }
 
   const increasePostFrequency = () => {
-    changePostFrequency(postFrequency + 1)
+    changePostFrequency(autoSlotSettings.postFrequency + 1)
   }
 
   const decreasePostFrequency = () => {
-    changePostFrequency(postFrequency - 1)
+    changePostFrequency(autoSlotSettings.postFrequency - 1)
   }
 
   const changePostBasis = (basis) => {
-    setPostBasis(basis)
+    const newAutoSlotSettings = { ...autoSlotSettings }
+    newAutoSlotSettings.postBasis = basis
     if (basis === 'WEEKLY') {
-      setPostDays(postDays.slice(0, postFrequency))
+      newAutoSlotSettings.postingDays = postingDays?.slice(0, newAutoSlotSettings.postFrequency)
     }
+    setAutoSlotSettings(newAutoSlotSettings)
+    onSlotChange(newAutoSlotSettings)
   }
 
   const togglePostDay = (day) => {
-    if (postDays.includes(day)) {
-      setPostDays(postDays.filter((d) => d !== day))
+    const newAutoSlotSettings = { ...autoSlotSettings }
+    if (postingDays?.includes(day)) {
+      newAutoSlotSettings.postingDays = postingDays?.filter((d) => d !== day)
     } else {
-      setPostDays([...postDays, day])
+      newAutoSlotSettings.postingDays = [...postingDays, day]
     }
+    setAutoSlotSettings(newAutoSlotSettings)
+    onSlotChange(newAutoSlotSettings)
   }
 
   const shouldDisableDay = (day) => {
+    const { postFrequency, postBasis, postingDays } = autoSlotSettings
     if (postFrequency === 0 || !postBasis) {
       return true
     }
     if (postBasis === 'DAILY') {
       return false
     }
-    if (postDays?.length !== postFrequency) {
+    if (postingDays?.length !== postFrequency) {
       return false
     }
-    return !postDays.includes(day)
+    return !postingDays.includes(day)
   }
 
   const onSlideOverClose = () => {
-    console.log('close')
     setShowSlideOver(false)
   }
 
@@ -146,22 +169,22 @@ export function AutoSlots() {
         </ul>
         <p className="pb-4">{t('setup_slots_auto_writing_days')}</p>
         <ul className="flex flex-wrap">
-          {Object.values(days).map((day) => (
-            <li key={day} className="mr-2 mb-2">
+          {Object.entries(days).map(([key, value]) => (
+            <li key={key} className="mr-2 mb-2">
               <input
                 type="checkbox"
-                id={day}
+                id={key}
                 className="peer hidden"
-                checked={postDays.includes(day)}
-                value={day}
-                onChange={() => togglePostDay(day)}
-                disabled={shouldDisableDay(day)}
+                checked={postingDays?.includes(key)}
+                value={key}
+                onChange={() => togglePostDay(key)}
+                disabled={shouldDisableDay(key)}
               />
               <label
-                htmlFor={day}
+                htmlFor={key}
                 className="inline-flex cursor-pointer items-center justify-between rounded-full border border-gray-200 bg-zinc-50 py-2 px-4 text-zinc-900 hover:bg-violet-50 hover:text-violet-600 peer-checked:border-violet-600 peer-checked:bg-violet-600 peer-checked:text-white peer-disabled:cursor-not-allowed peer-disabled:border-zinc-300 peer-disabled:bg-zinc-300 peer-disabled:text-white"
               >
-                <div className="w-full px-1 text-sm font-medium">{t(day)}</div>
+                <div className="w-full px-1 text-sm font-medium">{t(value)}</div>
               </label>
             </li>
           ))}

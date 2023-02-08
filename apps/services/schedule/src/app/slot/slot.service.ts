@@ -11,8 +11,8 @@ export class SlotService {
     this.logger.info(`Received request to setup slots for user [userId=${userId}]`)
     const existingSlots = await this.slotRepository.getSlotsByUserId(userId)
 
-    if (existingSlots) {
-      throw new BadRequestException('Slots already exist for user=${userId}')
+    if (existingSlots.length !== 0) {
+      throw new BadRequestException(`Slots already exist for user=${userId}`)
     }
 
     const createdSlots = await this.slotRepository.createSlots(slots)

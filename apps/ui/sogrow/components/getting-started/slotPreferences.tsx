@@ -12,6 +12,8 @@ export function SlotPreferences({ onSlotPreferenceChange }: SlotPreferencesProps
   const { data: userSettings } = useGetUserSettings()
   const [slotPreference, setSlotPreference] = useState<SlotPreference>()
 
+  const mutateUserSettings = useUpdateUserSettings()
+
   useEffect(() => {
     if (userSettings?.slotPreference) {
       setSlotPreference(SlotPreference[userSettings.slotPreference])
@@ -30,8 +32,6 @@ export function SlotPreferences({ onSlotPreferenceChange }: SlotPreferencesProps
       description: t('slot_preference_manual_description'),
     },
   ]
-
-  const mutateUserSettings = useUpdateUserSettings()
 
   const onChange = async (slotPreference: SlotPreference) => {
     await mutateUserSettings.mutate({ ...userSettings, slotPreference: SlotPreference[slotPreference] })
