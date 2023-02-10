@@ -34,5 +34,7 @@
   "thur": "Thur",
   "fr": "Fr",
   "sat": "Sat",
-  "sun": "Sun"
+  "sun": "Sun",
+  "generic_error": "Something went wrong. Please try again.",
+  "generic_error_retry": "Retry"
 }

@@ -11,8 +11,11 @@ import { IState } from 'flagsmith/types'
 import { FlagsmithProvider } from 'flagsmith/react'
 import localFont from '@next/font/local'
 import Layout from '../components/layout'
-import { Flowbite } from 'flowbite-react'
+import { Button, Flowbite, Toast } from 'flowbite-react'
 import { customFlowbiteTheme } from '../theme/customFlowbiteTheme'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import useTranslation from 'next-translate/useTranslation'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,6 +36,23 @@ type AppOwnProps = {
 
 function CustomApp({ Component, pageProps: { session, ...pageProps }, flagsmithState }: AppProps & AppOwnProps) {
   const [queryClient] = React.useState(() => new QueryClient())
+  const { t } = useTranslation('common')
+
+  const ErrorComponent = () => (
+    <Toast className="absolute bottom-5 left-1/2 -translate-y-1/2 -translate-x-1/2 md:top-36 md:bottom-auto">
+      <div className="mr-2 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+        <ExclamationCircleIcon className="h-5 w-5" />
+      </div>
+      <div className="text-sm font-normal text-zinc-900">{t('generic_error')}</div>
+      <div className="ml-auto flex items-center space-x-2">
+        <Button color="secondary" size="xs">
+          {t('generic_error_retry')}
+        </Button>
+        <Toast.Toggle />
+      </div>
+    </Toast>
+  )
+
   return (
     <>
       <Head>
@@ -73,7 +93,9 @@ function CustomApp({ Component, pageProps: { session, ...pageProps }, flagsmithS
             <SessionProvider session={session}>
               <QueryClientProvider client={queryClient}>
                 <Layout>
-                  <Component {...pageProps} />
+                  <ErrorBoundary FallbackComponent={ErrorComponent}>
+                    <Component {...pageProps} />
+                  </ErrorBoundary>
                   <ReactQueryDevtools initialIsOpen={false} />
                 </Layout>
               </QueryClientProvider>
