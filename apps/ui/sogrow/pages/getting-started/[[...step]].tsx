@@ -2,9 +2,8 @@ import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import SlotPreferences from '../../components/getting-started/slotPreferences'
-import { Button } from 'flowbite-react'
 import { Slot, SlotPreference, SlotType, Weekday } from '@sogrow/services/domain/bom'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useGetUserSettings } from '../../api/user-settings'
 import ManualSlots, { ManualSlotSettings } from '../../components/getting-started/manualSlots'
@@ -15,6 +14,7 @@ import SetupComplete from '../../components/getting-started/setupComplete'
 import { useSetupSlots } from '../../api/slots'
 import { inferSSRProps } from '../../types/inferSSRProps'
 import { randomTimeRange } from '../../utils/timeUtils'
+import toast from 'react-hot-toast'
 
 type OnboardingPageProps = inferSSRProps<typeof getServerSideProps>
 
@@ -36,7 +36,7 @@ const stepRouteSchema = z.object({
 export function OnboardingPage({ user }: OnboardingPageProps) {
   const router = useRouter()
   const { t } = useTranslation('common')
-  const { data: userSettings, isLoading } = useGetUserSettings()
+  const { data: userSettings } = useGetUserSettings()
   const [slotPreference, setSlotPreference] = useState<SlotPreference>(null)
   const [autoSlots, setAutoSlots] = useState<AutoSlotSettings>()
   const [manualSlots, setManualSlots] = useState<ManualSlotSettings>()
@@ -45,27 +45,6 @@ export function OnboardingPage({ user }: OnboardingPageProps) {
 
   const result = stepRouteSchema.safeParse(router.query)
   const currentStep = result.success ? result.data.step[0] : INITIAL_STEP
-  const currentStepIndex = steps.indexOf(currentStep)
-
-  const headers = [
-    {
-      title: t('setup_slot_preference_headline'),
-      buttonNextLabel: t('setup_slots_button_next_label'),
-    },
-    {
-      title: t('setup_slots_headline_auto'),
-      buttonPreviousLabel: t('setup_slots_button_previous_label'),
-      buttonNextLabel: t('setup_slots_button_finish_label'),
-    },
-    {
-      title: t('setup_slots_headline_manual'),
-      buttonPreviousLabel: t('setup_slots_button_previous_label'),
-      buttonNextLabel: t('setup_slots_button_finish_label'),
-    },
-    {
-      title: t('setup_complete'),
-    },
-  ]
 
   useEffect(() => {
     if (userSettings?.slotPreference) {
@@ -104,15 +83,25 @@ export function OnboardingPage({ user }: OnboardingPageProps) {
     'setup-auto-slots': {
       next: async () => {
         const slots = unifyAutoSlots(autoSlots, user.id)
-        await mutateSetupSlots.mutateAsync({ slots })
-        goToIndex(3)
+        try {
+          await mutateSetupSlots.mutateAsync({ slots })
+          goToIndex(3)
+        } catch (err) {
+          toast.error(t('generic_error'))
+          // noop
+        }
       },
     },
     'setup-manually-slots': {
       next: async () => {
         const slots = unifyManualSlots(manualSlots, user.id)
-        await mutateSetupSlots.mutateAsync({ slots })
-        goToIndex(3)
+        try {
+          await mutateSetupSlots.mutateAsync({ slots })
+          goToIndex(3)
+        } catch (err) {
+          toast.error(t('generic_error'))
+          // noop
+        }
       },
     },
   }
@@ -129,12 +118,6 @@ export function OnboardingPage({ user }: OnboardingPageProps) {
     await stepSequenceChange[currentStep]?.next()
   }
 
-  const getCurrentStepIndex = () => {
-    const currentStep = result.success ? result.data.step[0] : INITIAL_STEP
-    const currentIndexOfStep = steps.indexOf(currentStep)
-    return currentIndexOfStep === 2 ? 2 : currentIndexOfStep + 1
-  }
-
   return (
     <>
       <Head>
@@ -142,25 +125,12 @@ export function OnboardingPage({ user }: OnboardingPageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="flex h-full flex-col py-8">
-        {currentStep === 'slot-preference' && <SlotPreferences onSlotPreferenceChange={onSlotPreferenceChange} />}
-        {currentStep === 'setup-auto-slots' && <AutoSlots onSlotChange={onAutoSlotsChange} />}
-        {currentStep === 'setup-manually-slots' && <ManualSlots onSlotsChange={onManualSlotsChange} />}
-        {currentStep === 'setup-complete' && <SetupComplete />}
-        {currentStep !== 'setup-complete' && (
-          <div className="mt-8 flex items-center justify-between">
-            <span className="pl-4 text-sm text-zinc-600">{getCurrentStepIndex()}/2</span>
-            <div className="flex">
-              {headers[currentStepIndex]?.buttonPreviousLabel && (
-                <Button className="mr-4" color="secondary" pill onClick={onPrevious}>
-                  {headers[currentStepIndex]?.buttonPreviousLabel}
-                </Button>
-              )}
-              <Button color="primary" pill onClick={onNext} disabled={isLoading}>
-                {headers[currentStepIndex]?.buttonNextLabel}
-              </Button>
-            </div>
-          </div>
+        {currentStep === 'slot-preference' && <SlotPreferences onSlotPreferenceChange={onSlotPreferenceChange} onNext={onNext} />}
+        {currentStep === 'setup-auto-slots' && <AutoSlots onSlotChange={onAutoSlotsChange} onPrevious={onPrevious} onNext={onNext} />}
+        {currentStep === 'setup-manually-slots' && (
+          <ManualSlots onSlotsChange={onManualSlotsChange} onPrevious={onPrevious} onNext={onNext} />
         )}
+        {currentStep === 'setup-complete' && <SetupComplete />}
       </section>
     </>
   )

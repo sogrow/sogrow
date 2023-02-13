@@ -54,9 +54,11 @@ const MAX_POSTS_PER_DAY = 5
 
 export type ManualSlotsProps = {
   onSlotsChange: (slotSettings: ManualSlotSettings) => void
+  onNext?: () => void
+  onPrevious?: () => void
 }
 
-export function ManualSlots({ onSlotsChange }: ManualSlotsProps) {
+export function ManualSlots({ onSlotsChange, onNext, onPrevious }: ManualSlotsProps) {
   const { t } = useTranslation('common')
   const { data: session } = useSession()
   const [slotSettings, setSlotSettings] = useState<ManualSlotSettings>(initialSlotSettings)
@@ -164,6 +166,17 @@ export function ManualSlots({ onSlotsChange }: ManualSlotsProps) {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-8 flex items-center justify-between">
+        <span className="pl-4 text-sm text-zinc-600">2/2</span>
+        <div className="flex">
+          <Button className="mr-4" color="secondary" pill onClick={onPrevious}>
+            {t('setup_slots_button_previous_label')}
+          </Button>
+          <Button color="primary" pill onClick={onNext}>
+            {t('setup_slots_button_finish_label')}
+          </Button>
+        </div>
       </div>
     </div>
   )

@@ -1,15 +1,17 @@
 import { SlotPreference } from '@sogrow/services/domain/bom'
 import { useGetUserSettings, useUpdateUserSettings } from '../../api/user-settings'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import {Button} from "flowbite-react";
 
 export type SlotPreferencesProps = {
   onSlotPreferenceChange?: (slotPreference: SlotPreference) => void
+  onNext?: () => void
 }
 
-export function SlotPreferences({ onSlotPreferenceChange }: SlotPreferencesProps) {
+export function SlotPreferences({ onSlotPreferenceChange, onNext }: SlotPreferencesProps) {
   const { t } = useTranslation('common')
-  const { data: userSettings } = useGetUserSettings()
+  const { data: userSettings, isLoading } = useGetUserSettings()
   const [slotPreference, setSlotPreference] = useState<SlotPreference>()
 
   const mutateUserSettings = useUpdateUserSettings()
@@ -66,6 +68,14 @@ export function SlotPreferences({ onSlotPreferenceChange }: SlotPreferencesProps
           </li>
         ))}
       </ul>
+      <div className="mt-8 flex items-center justify-between">
+        <span className="pl-4 text-sm text-zinc-600">1/2</span>
+        <div className="flex">
+          <Button color="primary" pill onClick={onNext} disabled={isLoading}>
+            {t('setup_slots_button_next_label')}
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

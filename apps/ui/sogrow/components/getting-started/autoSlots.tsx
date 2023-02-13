@@ -23,9 +23,11 @@ export type AutoSlotSettings = {
 
 export type AutoSlotProps = {
   onSlotChange: (slot: AutoSlotSettings) => void
+  onNext?: () => void
+  onPrevious?: () => void
 }
 
-export function AutoSlots({ onSlotChange }: AutoSlotProps) {
+export function AutoSlots({ onSlotChange, onNext, onPrevious }: AutoSlotProps) {
   const { t } = useTranslation('common')
   const [showSlideOver, setShowSlideOver] = useState(false)
   const [autoSlotSettings, setAutoSlotSettings] = useState<AutoSlotSettings>({
@@ -192,6 +194,17 @@ export function AutoSlots({ onSlotChange }: AutoSlotProps) {
         <SlideOver isOpen={showSlideOver} title={t('setup_slots_auto_help_title')} onClose={onSlideOverClose}>
           <p className="text-sm text-gray-500">{t('setup_slots_auto_help_description')}</p>
         </SlideOver>
+      </div>
+      <div className="mt-8 flex items-center justify-between">
+        <span className="pl-4 text-sm text-zinc-600">2/2</span>
+        <div className="flex">
+          <Button className="mr-4" color="secondary" pill onClick={onPrevious}>
+            {t('setup_slots_button_previous_label')}
+          </Button>
+          <Button color="primary" pill onClick={onNext}>
+            {t('setup_slots_button_finish_label')}
+          </Button>
+        </div>
       </div>
     </div>
   )
