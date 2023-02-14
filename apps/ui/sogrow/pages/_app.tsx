@@ -9,8 +9,24 @@ import { SessionProvider } from 'next-auth/react'
 import flagsmith from 'flagsmith/isomorphic'
 import { IState } from 'flagsmith/types'
 import { FlagsmithProvider } from 'flagsmith/react'
+import localFont from '@next/font/local'
+import Layout from '../components/layout'
+import { Flowbite } from 'flowbite-react'
+import { customFlowbiteTheme } from '../theme/customFlowbiteTheme'
+import { Toast } from '@sogrow/ui/shared-webcomponents'
 
 const inter = Inter({ subsets: ['latin'] })
+
+const powerGrotesk = localFont({
+  src: [
+    {
+      path: '../public/fonts/power-grotesk/PowerGroteskTrial-Regular.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-grotesk',
+})
 
 type AppOwnProps = {
   flagsmithState: IState
@@ -52,16 +68,21 @@ function CustomApp({ Component, pageProps: { session, ...pageProps }, flagsmithS
         <meta name="google" content="notranslate" key="notranslate" />
         <script defer data-domain="sogrow.co" src="https://plausible.io/js/script.js"></script>
       </Head>
-      <main className={inter.className}>
-        <FlagsmithProvider flagsmith={flagsmith} serverState={flagsmithState}>
-          <SessionProvider session={session}>
-            <QueryClientProvider client={queryClient}>
-              <Component {...pageProps} />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-          </SessionProvider>
-        </FlagsmithProvider>
-      </main>
+      <div className={`${inter.className} ${powerGrotesk.variable}`}>
+        <Flowbite theme={{ theme: customFlowbiteTheme }}>
+          <FlagsmithProvider flagsmith={flagsmith} serverState={flagsmithState}>
+            <SessionProvider session={session}>
+              <QueryClientProvider client={queryClient}>
+                <Layout>
+                  <Component {...pageProps} />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                </Layout>
+                <Toast />
+              </QueryClientProvider>
+            </SessionProvider>
+          </FlagsmithProvider>
+        </Flowbite>
+      </div>
     </>
   )
 }

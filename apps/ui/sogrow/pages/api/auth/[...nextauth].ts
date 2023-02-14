@@ -39,12 +39,13 @@ export const authOption: NextAuthOptions = {
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       session.accessToken = token.accessToken as string
-
+      session.user = token.user
       return session
     },
     async jwt({ token, user, account }) {
       if (user) {
         token.accessToken = await sogrowClient.exchangeToken(account.providerAccountId, account.provider, account.access_token)
+        token.user = await sogrowClient.getMe(token.accessToken)
       }
 
       return token

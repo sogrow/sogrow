@@ -22,6 +22,7 @@ Table User {
   socialAccounts SocialAccount [not null]
   slots Slot [not null]
   posts Post [not null]
+  userSettings UserSettings
   updatedAt DateTime [default: `now()`, not null]
   createdAt DateTime [default: `now()`, not null]
 }
@@ -70,10 +71,10 @@ Table Slot {
   userId String [not null]
   user User [not null]
   day Weekday [not null]
-  time DateTime
-  relativeTimeStart DateTime
-  relativeTimeEnd DateTime
-  timeOfDay TimeOfDay
+  time String
+  relativeTimeStart String
+  relativeTimeEnd String
+  type SlotType [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [default: `now()`, not null]
 }
@@ -157,6 +158,15 @@ Table Feedback {
   createdAt DateTime [default: `now()`, not null]
 }
 
+Table UserSettings {
+  id String [pk]
+  userId String [unique, not null]
+  user User [not null]
+  slotPreference SlotPreference [not null, default: 'MANUAL']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
 Table Session {
   id String [pk]
   sessionToken String [unique, not null]
@@ -185,11 +195,9 @@ Enum Weekday {
   SUNDAY
 }
 
-Enum TimeOfDay {
-  MORNING
-  AFTERNOON
-  EVENING
-  NIGHT
+Enum SlotType {
+  FIXED
+  RELATIVE
 }
 
 Enum PostStatus {
@@ -230,6 +238,11 @@ Enum UserRole {
   USER
 }
 
+Enum SlotPreference {
+  AUTO
+  MANUAL
+}
+
 Ref: Account.userId > User.id [delete: Cascade]
 
 Ref: SocialAccount.userId > User.id [delete: Cascade]
@@ -251,5 +264,7 @@ Ref: Schedule.postId > Post.id [delete: Cascade]
 Ref: Schedule.socialPostId > SocialPost.id [delete: Cascade]
 
 Ref: Feedback.userId > User.id
+
+Ref: UserSettings.userId - User.id [delete: Cascade]
 
 Ref: Session.userId > User.id [delete: Cascade]

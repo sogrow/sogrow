@@ -31,7 +31,7 @@ export function Header() {
 
   return (
     <header>
-      <div className="mx-auto flex max-w-5xl items-center justify-between py-6 px-4 text-center sm:px-6 lg:px-8">
+      <div className="container mx-auto flex items-center justify-between py-6 px-4 text-center">
         <Logo />
         {socialLogin}
       </div>

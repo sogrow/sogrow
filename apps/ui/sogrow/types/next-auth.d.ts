@@ -1,5 +1,5 @@
 import NextAuth, { DefaultSession } from 'next-auth'
-import { UserPlan, UserRole } from '@sogrow/services/domain/bom'
+import { User, UserPlan, UserRole } from '@sogrow/services/domain/bom'
 
 declare module 'next-auth' {
   interface Session {
@@ -19,5 +19,12 @@ declare module 'next-auth' {
     locale?: string
     country?: string
     timeZone?: string
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    accessToken: string
+    user: User
   }
 }

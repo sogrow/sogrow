@@ -21,4 +21,33 @@
 
 html {
   scroll-behavior: smooth;
+  @apply h-full;
+}
+
+body {
+  @apply h-full;
+}
+div#__next {
+  @apply h-full;
+}
+main {
+  @apply h-full;
+}
+
+@font-face {
+  font-family: 'power-grotesk';
+  src: url('../public/fonts/power-grotesk/PowerGroteskTrial-Bold.ttf');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'power-grotesk';
+  src: url('../public/fonts/power-grotesk/PowerGroteskTrial-Regular.ttf');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'power-grotesk';
+  src: url('../public/fonts/power-grotesk/PowerGroteskTrial-Light.ttf');
+  font-weight: 300;
 }

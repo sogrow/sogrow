@@ -40,11 +40,9 @@ export function Newsletter() {
   }, [isSuccess])
 
   return (
-    <section id="join" className="mx-auto my-16 flex max-w-md flex-col items-center px-4 text-center">
+    <section id="join" className="mx-auto flex max-w-md flex-col items-center py-16 px-4 text-center">
       <h2 className="mb-6 max-w-xs text-4xl font-medium text-gray-900 sm:mb-8 md:text-5xl">Join the beta</h2>
-      <p className="sm:text-ml text-cs mb-8 text-base text-gray-500">
-        Be the first to join the beta and get early access to Sogrow.
-      </p>
+      <p className="sm:text-ml text-cs mb-8 text-base text-gray-500">Be the first to join the beta and get early access to Sogrow.</p>
       <form className="flex w-full flex-col justify-center sm:flex-row" onSubmit={newsletterForm.handleSubmit}>
         <div>
           <div className="relative mt-1 mb-2 rounded-full shadow-sm sm:mb-0 sm:mr-2">

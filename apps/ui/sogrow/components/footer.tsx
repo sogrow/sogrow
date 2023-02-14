@@ -27,7 +27,7 @@ const navigation = [
 
 export function Footer() {
   return (
-    <footer className="bg-gray-100">
+    <footer className="mt-auto bg-gray-100">
       <div className="mx-auto flex max-w-5xl flex-col items-center py-12 px-4 text-center sm:px-6 md:flex-row md:justify-center md:justify-between lg:px-8">
         <div className="mb-8 md:m-0">
           <Logo logoOnly />

@@ -1,13 +1,10 @@
-import Header from '../components/header'
-import Footer from '../components/footer'
 import Link from 'next/link'
 
 export function Custom404Page() {
   return (
     <div className="flex h-screen flex-col">
-      <Header />
       <section className="flex flex-grow flex-col items-center justify-center">
-        <div className="bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+        <div className="px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
           <div className="mx-auto max-w-max">
             <main className="sm:flex">
               <p className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">404</p>
@@ -27,7 +24,6 @@ export function Custom404Page() {
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   )
 }
