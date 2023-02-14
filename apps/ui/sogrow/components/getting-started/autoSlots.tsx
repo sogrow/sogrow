@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation'
-import { Button, TextInput } from 'flowbite-react'
-import { useState } from 'react'
+import { Button, Spinner, TextInput } from 'flowbite-react'
+import React, { useState } from 'react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { SlideOver } from '@sogrow/ui/shared-webcomponents'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
@@ -22,12 +22,13 @@ export type AutoSlotSettings = {
 }
 
 export type AutoSlotProps = {
+  isSubmitting: boolean
   onSlotChange: (slot: AutoSlotSettings) => void
   onNext?: () => void
   onPrevious?: () => void
 }
 
-export function AutoSlots({ onSlotChange, onNext, onPrevious }: AutoSlotProps) {
+export function AutoSlots({ isSubmitting, onSlotChange, onNext, onPrevious }: AutoSlotProps) {
   const { t } = useTranslation('common')
   const [showSlideOver, setShowSlideOver] = useState(false)
   const [autoSlotSettings, setAutoSlotSettings] = useState<AutoSlotSettings>({
@@ -36,15 +37,18 @@ export function AutoSlots({ onSlotChange, onNext, onPrevious }: AutoSlotProps) {
     postingDays: [],
   })
   const { postFrequency, postBasis, postingDays } = autoSlotSettings
+  const isValid = postFrequency !== 0 && postBasis && postingDays?.length !== 0
 
   const postingBasis: PostBasis[] = [
     {
       id: 'DAILY',
       title: t('setup_slots_auto_writing_basis_daily_title'),
+      description: t('setup_slots_auto_writing_basis_daily_description', { count: postFrequency }),
     },
     {
       id: 'WEEKLY',
       title: t('setup_slots_auto_writing_basis_weekly_title'),
+      description: t('setup_slots_auto_writing_basis_weekly_description', { count: postFrequency }),
     },
   ]
 
@@ -144,7 +148,7 @@ export function AutoSlots({ onSlotChange, onNext, onPrevious }: AutoSlotProps) {
           </div>
         </div>
         <p className="pb-4">{t('setup_slots_auto_writing_basis')}</p>
-        <ul className="grid w-full grid-cols-2 gap-2  pb-8">
+        <ul className="grid w-full grid-cols-2 place-content-stretch gap-2 pb-8">
           {postingBasis.map((basis) => (
             <li key={basis.id}>
               <input
@@ -155,15 +159,15 @@ export function AutoSlots({ onSlotChange, onNext, onPrevious }: AutoSlotProps) {
                 value={basis.id}
                 checked={postBasis === basis.id}
                 onChange={() => changePostBasis(basis.id)}
-                disabled={postFrequency === 0}
                 required
               />
               <label
                 htmlFor={basis.id}
-                className="group inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-900 hover:bg-violet-100 hover:text-gray-600 peer-checked:border-violet-600 peer-checked:bg-violet-50 peer-checked:text-violet-600 peer-disabled:cursor-not-allowed peer-disabled:border-zinc-300 peer-disabled:bg-zinc-300 peer-disabled:text-white"
+                className="group inline-flex min-h-full w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-5 text-zinc-900 hover:bg-violet-100 hover:text-gray-600 peer-checked:border-violet-600 peer-checked:bg-violet-50 peer-checked:text-violet-600"
               >
                 <div className="block">
                   <div className="w-full text-lg font-semibold">{basis.title}</div>
+                  <div className="group-peer-checked:text-violet-600 w-full text-zinc-700">{basis.description}</div>
                 </div>
               </label>
             </li>
@@ -198,10 +202,15 @@ export function AutoSlots({ onSlotChange, onNext, onPrevious }: AutoSlotProps) {
       <div className="mt-8 flex items-center justify-between">
         <span className="pl-4 text-sm text-zinc-600">2/2</span>
         <div className="flex">
-          <Button className="mr-4" color="secondary" pill onClick={onPrevious}>
+          <Button className="mr-4" color="secondary" pill onClick={onPrevious} disabled={isSubmitting}>
             {t('setup_slots_button_previous_label')}
           </Button>
-          <Button color="primary" pill onClick={onNext}>
+          <Button color="primary" pill onClick={onNext} disabled={isSubmitting || !isValid}>
+            {isSubmitting && (
+              <div className="mr-3">
+                <Spinner color="violet" size="sm" light={true} />
+              </div>
+            )}
             {t('setup_slots_button_finish_label')}
           </Button>
         </div>
@@ -213,6 +222,7 @@ export function AutoSlots({ onSlotChange, onNext, onPrevious }: AutoSlotProps) {
 type PostBasis = {
   id: string
   title: string
+  description: string
 }
 
 export default AutoSlots

@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation'
-import { useState } from 'react'
-import { Button, TextInput } from 'flowbite-react'
+import React, { useState } from 'react'
+import { Button, Spinner, TextInput } from 'flowbite-react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
@@ -53,15 +53,17 @@ const initialSlotSettings: ManualSlotSettings = {
 const MAX_POSTS_PER_DAY = 5
 
 export type ManualSlotsProps = {
+  isSubmitting: boolean
   onSlotsChange: (slotSettings: ManualSlotSettings) => void
   onNext?: () => void
   onPrevious?: () => void
 }
 
-export function ManualSlots({ onSlotsChange, onNext, onPrevious }: ManualSlotsProps) {
+export function ManualSlots({ onSlotsChange, onNext, onPrevious, isSubmitting }: ManualSlotsProps) {
   const { t } = useTranslation('common')
   const { data: session } = useSession()
   const [slotSettings, setSlotSettings] = useState<ManualSlotSettings>(initialSlotSettings)
+  const isValid = Object.values(slotSettings).some((day) => day.slots?.length > 0)
 
   const addSlot = (day: WeekDay['day']) => {
     const newSlotSettings = { ...slotSettings }
@@ -170,10 +172,15 @@ export function ManualSlots({ onSlotsChange, onNext, onPrevious }: ManualSlotsPr
       <div className="mt-8 flex items-center justify-between">
         <span className="pl-4 text-sm text-zinc-600">2/2</span>
         <div className="flex">
-          <Button className="mr-4" color="secondary" pill onClick={onPrevious}>
+          <Button className="mr-4" color="secondary" pill onClick={onPrevious} disabled={isSubmitting}>
             {t('setup_slots_button_previous_label')}
           </Button>
-          <Button color="primary" pill onClick={onNext}>
+          <Button color="primary" pill onClick={onNext} disabled={isSubmitting || !isValid}>
+            {isSubmitting && (
+              <div className="mr-3">
+                <Spinner color="violet" size="sm" light={true} />
+              </div>
+            )}
             {t('setup_slots_button_finish_label')}
           </Button>
         </div>

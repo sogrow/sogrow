@@ -2,7 +2,7 @@ import { SlotPreference } from '@sogrow/services/domain/bom'
 import { useGetUserSettings, useUpdateUserSettings } from '../../api/user-settings'
 import React, { useEffect, useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import {Button} from "flowbite-react";
+import { Button, Spinner } from 'flowbite-react'
 
 export type SlotPreferencesProps = {
   onSlotPreferenceChange?: (slotPreference: SlotPreference) => void
@@ -71,7 +71,12 @@ export function SlotPreferences({ onSlotPreferenceChange, onNext }: SlotPreferen
       <div className="mt-8 flex items-center justify-between">
         <span className="pl-4 text-sm text-zinc-600">1/2</span>
         <div className="flex">
-          <Button color="primary" pill onClick={onNext} disabled={isLoading}>
+          <Button color="primary" pill onClick={onNext} disabled={isLoading || !slotPreference}>
+            {isLoading && (
+              <div className="mr-3">
+                <Spinner color="violet" size="sm" light={true} />
+              </div>
+            )}
             {t('setup_slots_button_next_label')}
           </Button>
         </div>

@@ -126,9 +126,16 @@ export function OnboardingPage({ user }: OnboardingPageProps) {
       </Head>
       <section className="flex h-full flex-col py-8">
         {currentStep === 'slot-preference' && <SlotPreferences onSlotPreferenceChange={onSlotPreferenceChange} onNext={onNext} />}
-        {currentStep === 'setup-auto-slots' && <AutoSlots onSlotChange={onAutoSlotsChange} onPrevious={onPrevious} onNext={onNext} />}
+        {currentStep === 'setup-auto-slots' && (
+          <AutoSlots onSlotChange={onAutoSlotsChange} onPrevious={onPrevious} onNext={onNext} isSubmitting={mutateSetupSlots.isLoading} />
+        )}
         {currentStep === 'setup-manually-slots' && (
-          <ManualSlots onSlotsChange={onManualSlotsChange} onPrevious={onPrevious} onNext={onNext} />
+          <ManualSlots
+            onSlotsChange={onManualSlotsChange}
+            onPrevious={onPrevious}
+            onNext={onNext}
+            isSubmitting={mutateSetupSlots.isLoading}
+          />
         )}
         {currentStep === 'setup-complete' && <SetupComplete />}
       </section>
@@ -138,18 +145,19 @@ export function OnboardingPage({ user }: OnboardingPageProps) {
 
 function unifyManualSlots(manualSlots: ManualSlotSettings, userId: string): Slot[] {
   const slots: Slot[] = []
-  Object.keys(manualSlots).forEach((key) => {
-    if (manualSlots[key]) {
-      slots.push(
-        ...manualSlots[key]['slots'].map((slot) => ({
-          type: SlotType.FIXED,
-          userId,
-          day: key.toUpperCase(),
-          time: slot.publishTime,
-        })),
-      )
-    }
-  })
+  manualSlots &&
+    Object.keys(manualSlots).forEach((key) => {
+      if (manualSlots[key]) {
+        slots.push(
+          ...manualSlots[key]['slots'].map((slot) => ({
+            type: SlotType.FIXED,
+            userId,
+            day: key.toUpperCase(),
+            time: slot.publishTime,
+          })),
+        )
+      }
+    })
   return slots
 }
 

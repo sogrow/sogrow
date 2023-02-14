@@ -26,4 +26,9 @@ export const customFlowbiteTheme: CustomFlowbiteTheme = {
       },
     },
   },
+  spinner: {
+    color: {
+      violet: 'fill-violet-600',
+    },
+  },
 }
